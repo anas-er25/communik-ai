@@ -6,31 +6,12 @@ import { useToast } from '@/components/ui/use-toast';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
-  adminOnly?: boolean;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, adminOnly = false }) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const { currentUser, loading } = useAuth();
   const location = useLocation();
-  const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
-
-  // For admin check, check if the user's email is in the admin list
-  useEffect(() => {
-    const checkAdmin = async () => {
-      // This is a simple example. In a real application, you would likely
-      // check a claim in the user's Firebase token, or check against a database
-      if (currentUser?.email === "errakibianas8@gmail.com") { 
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
-    };
-
-    if (currentUser) {
-      checkAdmin();
-    }
-  }, [currentUser]);
 
   // Show loading spinner while checking auth state
   if (loading) {
@@ -56,17 +37,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, adminOnly = false
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
-  // Check admin requirement
-  if (adminOnly && !isAdmin) {
-    toast({
-      title: "Accès refusé",
-      description: "Seuls les administrateurs peuvent accéder à cette page.",
-      variant: "destructive"
-    });
-    return <Navigate to="/" replace />;
-  }
-
-  // All checks passed, render the protected route
+  // User is authenticated, render the protected route
   return <>{children}</>;
 };
 

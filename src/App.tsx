@@ -42,16 +42,14 @@ const App = () => (
               <Route path="/auth/register" element={<Register />} />
               <Route path="/auth/password-reset" element={<PasswordReset />} />
               
-              {/* Protected routes */}
+              {/* Protected routes - available to all authenticated users */}
               <Route path="/profile" element={
                 <PrivateRoute>
                   <UserProfile />
                 </PrivateRoute>
               } />
-
-              {/* Admin routes */}
               <Route path="/admin" element={
-                <PrivateRoute adminOnly>
+                <PrivateRoute>
                   <AdminDashboard />
                 </PrivateRoute>
               } />
