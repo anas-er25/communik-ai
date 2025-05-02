@@ -300,11 +300,16 @@ const Contact = () => {
 
       {/* Map Section */}
       <section className="section-padding bg-gray-50 py-0">
-        <div className="h-96 w-full bg-gray-300 flex items-center justify-center">
-          <div className="text-center">
-            <h3 className="text-xl font-semibold mb-2">Carte Google Maps</h3>
-            <p className="text-gray-600">Une carte interactive serait intégrée ici</p>
-          </div>
+        <div className="overflow-hidden rounded-lg border">
+          <iframe
+            title="Carte Google Maps"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.2712013001124!2d-8.030016025224263!3d31.640861541180602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef96ad478ef9%3A0x9a4265bf810cd3da!2sCOMMUNIK!5e1!3m2!1sen!2sma!4v1746218886829!5m2!1sen!2sma"
+            width="100%"
+            height="400"
+            style={{ border: 0 }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
       </section>
 
