@@ -7,46 +7,46 @@ import { Linkedin, Twitter, Mail } from 'lucide-react';
 const Team = () => {
   const teamMembers = [
     {
-      name: "Alexandra Martin",
+      name: "Fatimaezzahra ALAMI",
       role: "Directrice Créative",
       bio: "Avec plus de 10 ans d'expérience dans le design et la communication visuelle, Alexandra dirige notre équipe créative avec passion et innovation.",
       expertise: ["Branding", "Direction Artistique", "Stratégie de marque"],
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=300&auto=format&fit=crop"
+      image: "https://mighty.tools/mockmind-api/content/human/8.jpg"
     },
     {
       name: "Thomas Leroux",
       role: "Lead Développeur",
       bio: "Expert en technologies web modernes, Thomas supervise tous nos projets de développement avec un focus sur la performance et l'expérience utilisateur.",
       expertise: ["Développement Frontend", "React", "Architecture logicielle"],
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=300&auto=format&fit=crop"
+      image: "https://mighty.tools/mockmind-api/content/human/80.jpg"
     },
     {
       name: "Sophie Dubois",
       role: "Spécialiste IA",
       bio: "Docteure en intelligence artificielle, Sophie apporte son expertise pour intégrer des solutions IA innovantes dans tous nos projets.",
       expertise: ["Machine Learning", "Traitement du langage naturel", "Data Science"],
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=300&auto=format&fit=crop"
+      image: "https://mighty.tools/mockmind-api/content/human/108.jpg"
     },
     {
       name: "David Chen",
       role: "Expert en Automatisation",
       bio: "Expert en optimisation des processus, David conçoit des solutions d'automatisation sur mesure qui transforment l'efficacité opérationnelle.",
       expertise: ["Workflows", "Intégration API", "Optimisation des processus"],
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop"
+      image: "https://mighty.tools/mockmind-api/content/human/92.jpg"
     },
     {
       name: "Émilie Petit",
       role: "UX/UI Designer",
       bio: "Émilie crée des interfaces utilisateur élégantes et intuitives, alliant esthétique et fonctionnalité pour une expérience utilisateur optimale.",
       expertise: ["Design d'interface", "Wireframing", "Tests utilisateurs"],
-      image: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=300&auto=format&fit=crop"
+      image: "https://mighty.tools/mockmind-api/content/human/97.jpg"
     },
     {
       name: "Julien Moreau",
       role: "Chef de Projet",
       bio: "Julien coordonne nos projets avec rigueur et créativité, assurant une communication fluide et le respect des délais et des objectifs.",
       expertise: ["Gestion de projet", "Méthodologies agiles", "Analyse des besoins"],
-      image: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?q=80&w=300&auto=format&fit=crop"
+      image: "https://mighty.tools/mockmind-api/content/human/91.jpg"
     }
   ];
 

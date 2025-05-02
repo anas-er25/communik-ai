@@ -75,7 +75,7 @@ const Home = () => {
                 <Button className="btn-primary text-lg w-full sm:w-auto">Demander un devis</Button>
               </Link>
               <Link to="/services">
-                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-communikAI-blue text-lg w-full sm:w-auto">
+                <Button variant="outline" className="border-white text-black hover:bg-white hover:text-gray-800 text-lg w-full sm:w-auto">
                   Découvrir nos services
                 </Button>
               </Link>
@@ -192,9 +192,9 @@ const Home = () => {
               <div key={index} className="bg-white bg-opacity-5 p-8 rounded-lg border border-gray-700">
                 <p className="text-gray-300 mb-6 italic">"{testimonial.content}"</p>
                 <div className="flex items-center">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name} 
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
