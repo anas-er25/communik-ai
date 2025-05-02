@@ -15,16 +15,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Navbar />
       <main className="flex-grow">{children}</main>
       <Footer />
-      
-      {/* Admin quick access button - fixed in bottom right corner */}
-      <div className="fixed bottom-4 right-4">
-        <Link 
-          to="/admin/login" 
-          className="bg-slate-800 text-white p-3 rounded-full shadow-lg hover:bg-slate-700 transition-colors"
-          title="Administration"
-        >
-          <Settings className="h-5 w-5" />
-        </Link>
+      <div className="fixed bottom-6 right-2 z-50">
+        <div className="bg-indigo-600 text-white py-4 px-8 w-16 h-16 rounded-full flex items-center justify-center">
+          <Link to="/admin/login" title="Accéder à l'administration">
+            <Settings className="h-6 w-6" />
+          </Link>
+        </div>
       </div>
     </div>
   );
