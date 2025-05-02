@@ -1,14 +1,33 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { currentUser, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error("Failed to sign out:", error);
+    }
   };
 
   const navLinks = [
@@ -41,9 +60,47 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
-          <Link to="/contact">
-            <Button className="btn-primary">Demander un devis</Button>
-          </Link>
+          
+          {currentUser ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  {currentUser.photoURL ? (
+                    <img 
+                      src={currentUser.photoURL} 
+                      alt="Profile" 
+                      className="h-8 w-8 rounded-full"
+                    />
+                  ) : (
+                    <User className="h-5 w-5" />
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <div className="p-2 text-sm">
+                  Connecté en tant que<br />
+                  <span className="font-medium">{currentUser.displayName || currentUser.email}</span>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/profile" className="cursor-pointer">Mon profil</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+                  Se déconnecter
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="flex space-x-2">
+              <Link to="/auth/login">
+                <Button variant="outline">Connexion</Button>
+              </Link>
+              <Link to="/auth/register">
+                <Button>S'inscrire</Button>
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -69,9 +126,27 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link to="/contact" onClick={toggleMenu}>
-              <Button className="btn-primary w-full">Demander un devis</Button>
-            </Link>
+            
+            {currentUser ? (
+              <>
+                <Link to="/profile" className="py-2 px-4" onClick={toggleMenu}>Mon profil</Link>
+                <Button variant="outline" className="justify-start" onClick={() => {
+                  handleSignOut();
+                  toggleMenu();
+                }}>
+                  Se déconnecter
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/auth/login" onClick={toggleMenu}>
+                  <Button variant="outline" className="w-full">Connexion</Button>
+                </Link>
+                <Link to="/auth/register" onClick={toggleMenu}>
+                  <Button className="w-full">S'inscrire</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
