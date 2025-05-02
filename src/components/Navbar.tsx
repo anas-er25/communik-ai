@@ -78,7 +78,6 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <div className="p-2 text-sm">
-                  Connecté en tant que<br />
                   <span className="font-medium">{currentUser.displayName || currentUser.email}</span>
                 </div>
                 <DropdownMenuSeparator />
