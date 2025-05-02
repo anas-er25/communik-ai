@@ -77,7 +77,7 @@ const AdminDashboard: React.FC = () => {
           description: "Veuillez vous connecter pour accéder à cette page.",
           variant: "destructive"
         });
-        navigate('/admin/login');
+        navigate('/auth/login');
       } else {
         // Load leads (in real app, would fetch from API/database)
         setLeads(mockLeads);
@@ -96,7 +96,7 @@ const AdminDashboard: React.FC = () => {
       title: "Déconnexion réussie",
       description: "Vous avez été déconnecté avec succès."
     });
-    navigate('/admin/login');
+    navigate('/auth/login');
   };
 
   // Apply filters whenever filter states change

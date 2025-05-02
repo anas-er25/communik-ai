@@ -11,7 +11,6 @@ import Team from "./pages/Team";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminLogin from "./pages/admin/AdminLogin";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import PasswordReset from "./pages/auth/PasswordReset";
@@ -48,7 +47,6 @@ const App = () => (
               } />
 
               {/* Admin routes */}
-              <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={
                 <PrivateRoute adminOnly>
                   <AdminDashboard />
