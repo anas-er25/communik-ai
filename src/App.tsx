@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
@@ -30,6 +30,7 @@ const App = () => (
         <BrowserRouter>
           <Layout>
             <Routes>
+              {/* Public routes */}
               <Route path="/" element={<Home />} />
               <Route path="/services" element={<Services />} />
               <Route path="/equipe" element={<Team />} />
@@ -40,6 +41,8 @@ const App = () => (
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/register" element={<Register />} />
               <Route path="/auth/password-reset" element={<PasswordReset />} />
+              
+              {/* Protected routes */}
               <Route path="/profile" element={
                 <PrivateRoute>
                   <UserProfile />
@@ -53,7 +56,7 @@ const App = () => (
                 </PrivateRoute>
               } />
               
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              {/* Redirect any other routes to home */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

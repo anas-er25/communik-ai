@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/components/ui/use-toast';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -12,13 +13,17 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, adminOnly = false
   const { currentUser, loading } = useAuth();
   const location = useLocation();
   const [isAdmin, setIsAdmin] = useState(false);
+  const { toast } = useToast();
 
-  // For admin check, you can implement your own logic
-  // For example, checking a claim in the user's Firebase token
+  // For admin check, check if the user's email is in the admin list
   useEffect(() => {
     const checkAdmin = async () => {
-      if (currentUser?.email === "errakibianas8@gmail.com") { // Simple example - replace with actual admin check
+      // This is a simple example. In a real application, you would likely
+      // check a claim in the user's Firebase token, or check against a database
+      if (currentUser?.email === "errakibianas8@gmail.com") { 
         setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
       }
     };
 
@@ -43,12 +48,22 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, adminOnly = false
 
   // Not logged in - redirect to login
   if (!currentUser) {
+    toast({
+      title: "Accès refusé",
+      description: "Veuillez vous connecter pour accéder à cette page.",
+      variant: "destructive"
+    });
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
   // Check admin requirement
   if (adminOnly && !isAdmin) {
-    return <Navigate to="/admin" replace />;
+    toast({
+      title: "Accès refusé",
+      description: "Seuls les administrateurs peuvent accéder à cette page.",
+      variant: "destructive"
+    });
+    return <Navigate to="/" replace />;
   }
 
   // All checks passed, render the protected route
