@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   Table,
   TableBody,
@@ -53,7 +54,7 @@ interface Lead {
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { currentUser, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
@@ -65,38 +66,31 @@ const AdminDashboard: React.FC = () => {
   const [dateFilter, setDateFilter] = useState('all');
   const [scoreFilter, setScoreFilter] = useState('all');
 
-  // Check authentication
+  // Load leads when component mounts
   useEffect(() => {
-    const checkAuth = () => {
-      const isAuth = localStorage.getItem('adminAuthenticated') === 'true';
-      setIsAuthenticated(isAuth);
-
-      if (!isAuth) {
-        toast({
-          title: "Accès refusé",
-          description: "Veuillez vous connecter pour accéder à cette page.",
-          variant: "destructive"
-        });
-        navigate('/auth/login');
-      } else {
-        // Load leads (in real app, would fetch from API/database)
-        setLeads(mockLeads);
-        setFilteredLeads(mockLeads);
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, [navigate, toast]);
+    // Load leads (in real app, would fetch from API/database)
+    setLeads(mockLeads);
+    setFilteredLeads(mockLeads);
+    setIsLoading(false);
+  }, []);
 
   // Handle logging out
-  const handleLogout = () => {
-    localStorage.removeItem('adminAuthenticated');
-    toast({
-      title: "Déconnexion réussie",
-      description: "Vous avez été déconnecté avec succès."
-    });
-    navigate('/auth/login');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Déconnexion réussie",
+        description: "Vous avez été déconnecté avec succès."
+      });
+      navigate('/auth/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast({
+        title: "Erreur de déconnexion",
+        description: "Une erreur est survenue lors de la déconnexion.",
+        variant: "destructive"
+      });
+    }
   };
 
   // Apply filters whenever filter states change
@@ -307,7 +301,7 @@ const AdminDashboard: React.FC = () => {
     );
   };
 
-  if (!isAuthenticated || isLoading) {
+  if (isLoading) {
     return (
       <div className="container flex items-center justify-center min-h-[60vh]">
         <div className="text-center">

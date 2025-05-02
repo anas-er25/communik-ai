@@ -22,7 +22,7 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       console.error(error);
     } finally {
@@ -34,7 +34,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       await signInWithGoogle();
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       console.error(error);
     } finally {
@@ -46,7 +46,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       await signInWithGithub();
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       console.error(error);
     } finally {

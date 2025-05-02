@@ -32,7 +32,7 @@ const Register = () => {
 
     try {
       await signUp(email, password, name);
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       console.error(error);
     } finally {
@@ -44,7 +44,7 @@ const Register = () => {
     setIsLoading(true);
     try {
       await signInWithGoogle();
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       console.error(error);
     } finally {
@@ -56,7 +56,7 @@ const Register = () => {
     setIsLoading(true);
     try {
       await signInWithGithub();
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       console.error(error);
     } finally {
