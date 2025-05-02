@@ -17,7 +17,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, adminOnly = false
   // For example, checking a claim in the user's Firebase token
   useEffect(() => {
     const checkAdmin = async () => {
-      if (currentUser?.email === "admin@example.com") { // Simple example - replace with actual admin check
+      if (currentUser?.email === "errakibianas8@gmail.com") { // Simple example - replace with actual admin check
         setIsAdmin(true);
       }
     };
@@ -48,7 +48,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, adminOnly = false
 
   // Check admin requirement
   if (adminOnly && !isAdmin) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/admin" replace />;
   }
 
   // All checks passed, render the protected route
