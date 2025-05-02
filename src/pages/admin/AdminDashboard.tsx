@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -58,20 +57,20 @@ const AdminDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
-  
+
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [serviceFilter, setServiceFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
   const [scoreFilter, setScoreFilter] = useState('all');
-  
+
   // Check authentication
   useEffect(() => {
     const checkAuth = () => {
       const isAuth = localStorage.getItem('adminAuthenticated') === 'true';
       setIsAuthenticated(isAuth);
-      
+
       if (!isAuth) {
         toast({
           title: "Accès refusé",
@@ -86,10 +85,10 @@ const AdminDashboard: React.FC = () => {
         setIsLoading(false);
       }
     };
-    
+
     checkAuth();
   }, [navigate, toast]);
-  
+
   // Handle logging out
   const handleLogout = () => {
     localStorage.removeItem('adminAuthenticated');
@@ -99,38 +98,38 @@ const AdminDashboard: React.FC = () => {
     });
     navigate('/admin/login');
   };
-  
+
   // Apply filters whenever filter states change
   useEffect(() => {
     if (!isLoading) {
       let filtered = [...leads];
-      
+
       // Search filter
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
-        filtered = filtered.filter(lead => 
-          lead.firstName.toLowerCase().includes(searchLower) || 
-          lead.lastName.toLowerCase().includes(searchLower) || 
-          lead.email.toLowerCase().includes(searchLower) || 
+        filtered = filtered.filter(lead =>
+          lead.firstName.toLowerCase().includes(searchLower) ||
+          lead.lastName.toLowerCase().includes(searchLower) ||
+          lead.email.toLowerCase().includes(searchLower) ||
           lead.company.toLowerCase().includes(searchLower)
         );
       }
-      
+
       // Status filter
       if (statusFilter !== 'all') {
         filtered = filtered.filter(lead => lead.status === statusFilter);
       }
-      
+
       // Service filter
       if (serviceFilter !== 'all') {
         filtered = filtered.filter(lead => lead.serviceType === serviceFilter);
       }
-      
+
       // Date filter
       if (dateFilter !== 'all') {
         const now = new Date();
         const cutoffDate = new Date();
-        
+
         if (dateFilter === 'today') {
           cutoffDate.setDate(now.getDate() - 1);
         } else if (dateFilter === 'week') {
@@ -138,10 +137,10 @@ const AdminDashboard: React.FC = () => {
         } else if (dateFilter === 'month') {
           cutoffDate.setMonth(now.getMonth() - 1);
         }
-        
+
         filtered = filtered.filter(lead => new Date(lead.createdAt) >= cutoffDate);
       }
-      
+
       // Score filter
       if (scoreFilter !== 'all') {
         if (scoreFilter === 'high') {
@@ -152,25 +151,25 @@ const AdminDashboard: React.FC = () => {
           filtered = filtered.filter(lead => lead.score < 40);
         }
       }
-      
+
       setFilteredLeads(filtered);
     }
   }, [searchTerm, statusFilter, serviceFilter, dateFilter, scoreFilter, leads, isLoading]);
-  
+
   // Enrich a lead with additional data
   const handleEnrichLead = async (leadId: string) => {
     try {
       const leadIndex = leads.findIndex(lead => lead.id === leadId);
       if (leadIndex === -1) return;
-      
+
       toast({
         title: "Enrichissement en cours",
         description: "Recherche d'informations complémentaires...",
       });
-      
+
       // In a real app, this would call an API like Clearbit
       const enrichedData = await enrichLead(leads[leadIndex].email, leads[leadIndex].company);
-      
+
       // Update the lead with enriched data
       const updatedLeads = [...leads];
       updatedLeads[leadIndex] = {
@@ -178,9 +177,9 @@ const AdminDashboard: React.FC = () => {
         enriched: true,
         enrichmentData: enrichedData
       };
-      
+
       setLeads(updatedLeads);
-      
+
       toast({
         title: "Enrichissement terminé",
         description: "Les données complémentaires ont été ajoutées."
@@ -193,32 +192,32 @@ const AdminDashboard: React.FC = () => {
       });
     }
   };
-  
+
   // Schedule an automated follow-up
   const handleScheduleFollowUp = async (leadId: string) => {
     try {
       const leadIndex = leads.findIndex(lead => lead.id === leadId);
       if (leadIndex === -1) return;
-      
+
       toast({
         title: "Programmation de suivi",
         description: "Configuration du suivi automatisé...",
       });
-      
+
       const lead = leads[leadIndex];
-      
+
       // In a real app, this would set up an automation workflow
       const nextFollowUp = await scheduleFollowUp(lead);
-      
+
       // Update the lead with follow-up data
       const updatedLeads = [...leads];
       updatedLeads[leadIndex] = {
         ...updatedLeads[leadIndex],
         nextFollowUp: nextFollowUp
       };
-      
+
       setLeads(updatedLeads);
-      
+
       toast({
         title: "Suivi programmé",
         description: `Le prochain contact est programmé pour ${new Date(nextFollowUp).toLocaleDateString()}.`
@@ -231,49 +230,49 @@ const AdminDashboard: React.FC = () => {
       });
     }
   };
-  
+
   // Mark a lead as contacted
   const handleMarkAsContacted = (leadId: string) => {
     const leadIndex = leads.findIndex(lead => lead.id === leadId);
     if (leadIndex === -1) return;
-    
+
     const updatedLeads = [...leads];
     updatedLeads[leadIndex] = {
       ...updatedLeads[leadIndex],
       status: 'contacted' as const,
       lastContact: new Date().toISOString()
     };
-    
+
     setLeads(updatedLeads);
-    
+
     toast({
       title: "Statut mis à jour",
       description: "Le lead a été marqué comme contacté."
     });
   };
-  
+
   // Update lead status
   const handleUpdateStatus = (leadId: string, status: Lead['status']) => {
     const leadIndex = leads.findIndex(lead => lead.id === leadId);
     if (leadIndex === -1) return;
-    
+
     const updatedLeads = [...leads];
     updatedLeads[leadIndex] = {
       ...updatedLeads[leadIndex],
       status: status
     };
-    
+
     setLeads(updatedLeads);
-    
+
     toast({
       title: "Statut mis à jour",
       description: `Le statut du lead a été changé en "${status}".`
     });
   };
-  
+
   // Get status badge color based on lead status
   const getStatusBadge = (status: Lead['status']) => {
-    switch(status) {
+    switch (status) {
       case 'new':
         return <Badge variant="outline" className="bg-blue-100 text-blue-600 hover:bg-blue-100">Nouveau</Badge>;
       case 'contacted':
@@ -288,7 +287,7 @@ const AdminDashboard: React.FC = () => {
         return <Badge variant="outline">Inconnu</Badge>;
     }
   };
-  
+
   // Display score with appropriate color
   const getScoreDisplay = (score: number) => {
     let color = '';
@@ -299,15 +298,15 @@ const AdminDashboard: React.FC = () => {
     } else {
       color = 'bg-red-500';
     }
-    
+
     return (
       <div className="flex items-center">
-        <Progress value={score} className="h-2 w-16 mr-2" indicatorClassName={color} />
+        <Progress value={score} className={`h-2 w-16 mr-2 ${color}`} />
         <span>{score}</span>
       </div>
     );
   };
-  
+
   if (!isAuthenticated || isLoading) {
     return (
       <div className="container flex items-center justify-center min-h-[60vh]">
@@ -323,7 +322,7 @@ const AdminDashboard: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="container px-4 py-8">
       <div className="flex justify-between items-center mb-8">
@@ -336,14 +335,14 @@ const AdminDashboard: React.FC = () => {
           Déconnexion
         </Button>
       </div>
-      
+
       <Tabs defaultValue="leads" className="mb-8">
         <TabsList className="mb-6">
           <TabsTrigger value="leads">Leads</TabsTrigger>
           <TabsTrigger value="analytics">Analytiques</TabsTrigger>
           <TabsTrigger value="automation">Automatisations</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="leads">
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <div className="flex flex-col md:flex-row md:items-end gap-4 mb-6">
@@ -360,7 +359,7 @@ const AdminDashboard: React.FC = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
@@ -378,7 +377,7 @@ const AdminDashboard: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Service</label>
                   <Select value={serviceFilter} onValueChange={setServiceFilter}>
@@ -395,7 +394,7 @@ const AdminDashboard: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
                   <Select value={dateFilter} onValueChange={setDateFilter}>
@@ -410,7 +409,7 @@ const AdminDashboard: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Score</label>
                   <Select value={scoreFilter} onValueChange={setScoreFilter}>
@@ -427,7 +426,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -514,7 +513,7 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>
         </TabsContent>
-        
+
         <TabsContent value="analytics">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
@@ -543,7 +542,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Distribution par service</CardTitle>
@@ -554,7 +553,7 @@ const AdminDashboard: React.FC = () => {
                   {['branding', 'web', 'ia', 'auto', 'other'].map(service => {
                     const count = leads.filter(l => l.serviceType === service).length;
                     const percentage = Math.round((count / leads.length) * 100);
-                    
+
                     return (
                       <div key={service} className="space-y-1">
                         <div className="flex justify-between items-center text-sm">
@@ -568,7 +567,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Statuts des leads</CardTitle>
@@ -579,7 +578,7 @@ const AdminDashboard: React.FC = () => {
                   {['new', 'contacted', 'qualified', 'converted', 'lost'].map(status => {
                     const count = leads.filter(l => l.status === status).length;
                     const percentage = Math.round((count / leads.length) * 100);
-                    
+
                     return (
                       <div key={status} className="space-y-1">
                         <div className="flex justify-between items-center text-sm">
@@ -595,7 +594,7 @@ const AdminDashboard: React.FC = () => {
             </Card>
           </div>
         </TabsContent>
-        
+
         <TabsContent value="automation">
           <div className="space-y-6">
             <Card>
@@ -619,7 +618,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Enrichissement des données</CardTitle>
