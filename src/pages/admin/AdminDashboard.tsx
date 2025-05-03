@@ -23,15 +23,18 @@ import { Progress } from '@/components/ui/progress';
 import { enrichLead } from '@/lib/lead-enrichment';
 import { scheduleFollowUp } from '@/lib/lead-automation';
 import { mockLeads } from '@/data/mock-leads';
+import axios from 'axios';
 
 interface Lead {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
+  phoneNumber: string;
   company: string;
   serviceType: string;
   message: string;
+  gdprConsent: boolean;
   createdAt: string;
   status: 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
   score: number;
@@ -68,10 +71,43 @@ const AdminDashboard: React.FC = () => {
 
   // Load leads when component mounts
   useEffect(() => {
-    // Load leads (in real app, would fetch from API/database)
-    setLeads(mockLeads);
-    setFilteredLeads(mockLeads);
-    setIsLoading(false);
+    const fetchLeads = async () => {
+      try {
+        const response = await axios.get(
+          `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_SHEET_SHARE}/values/Sheet1?key=${import.meta.env.VITE_GOOGLE_API_KEY}`
+        );
+
+        // Convertir les données de la feuille en objets
+        const [headers, ...rows] = response.data.values;
+        const leadsData = rows.map((row: any[], index: number) => {
+          const lead: any = {};
+          headers.forEach((header: string, i: number) => {
+            lead[header] = row[i];
+          });
+          return {
+            ...lead,
+            id: index.toString(),
+            status: 'new',
+            score: Math.floor(Math.random() * 100),
+            enriched: false
+          };
+        });
+
+        setLeads(leadsData);
+        setFilteredLeads(leadsData);
+      } catch (error) {
+        console.error('Erreur de chargement Google Sheets:', error);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger les données depuis Google Sheets.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLeads();
   }, []);
 
   // Handle logging out
@@ -334,7 +370,6 @@ const AdminDashboard: React.FC = () => {
         <TabsList className="mb-6">
           <TabsTrigger value="leads">Leads</TabsTrigger>
           <TabsTrigger value="analytics">Analytiques</TabsTrigger>
-          <TabsTrigger value="automation">Automatisations</TabsTrigger>
         </TabsList>
 
         <TabsContent value="leads">
@@ -583,53 +618,6 @@ const AdminDashboard: React.FC = () => {
                       </div>
                     );
                   })}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="automation">
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Configuration des automatisations</CardTitle>
-                <CardDescription>Paramétrez les règles de suivi automatique</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-6 text-muted-foreground">
-                  Cette section vous permet de configurer les règles d'automatisation pour le suivi des leads.
-                  Dans une version complète de l'application, vous pourriez:
-                </p>
-                <ul className="list-disc pl-6 space-y-2 mb-6 text-muted-foreground">
-                  <li>Définir des règles de relance automatique en fonction du score du lead</li>
-                  <li>Paramétrer des modèles d'emails de suivi</li>
-                  <li>Configurer des délais entre les relances</li>
-                  <li>Définir des seuils de score pour l'escalade vers l'équipe commerciale</li>
-                </ul>
-                <div className="flex justify-center mt-4">
-                  <Button disabled>Configurer les automatisations</Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Enrichissement des données</CardTitle>
-                <CardDescription>Configuration de l'enrichissement automatique</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-6 text-muted-foreground">
-                  Cette fonctionnalité permet d'enrichir automatiquement les informations sur vos leads en utilisant des services tiers comme Clearbit.
-                  Dans une version complète, vous pourriez configurer:
-                </p>
-                <ul className="list-disc pl-6 space-y-2 mb-6 text-muted-foreground">
-                  <li>L'API d'enrichissement à utiliser</li>
-                  <li>Les champs à enrichir automatiquement</li>
-                  <li>Les seuils de confiance pour l'enrichissement</li>
-                </ul>
-                <div className="flex justify-center mt-4">
-                  <Button disabled>Configurer l'enrichissement</Button>
                 </div>
               </CardContent>
             </Card>
