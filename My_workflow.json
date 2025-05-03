@@ -1,0 +1,339 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "form-webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        200,
+        0
+      ],
+      "id": "f1163b0e-cf9b-43cb-93fc-db9dee07463b",
+      "name": "Webhook",
+      "webhookId": "4625fe73-f7dc-4ad0-8534-daff5860b856"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1qCLoe3XqcBK1d1hpjPXKGhdzgUOD1xgqer6hJAgJmCQ",
+          "mode": "list",
+          "cachedResultName": "communikai",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qCLoe3XqcBK1d1hpjPXKGhdzgUOD1xgqer6hJAgJmCQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qCLoe3XqcBK1d1hpjPXKGhdzgUOD1xgqer6hJAgJmCQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "firstName": "={{ $json.body.firstName }}",
+            "lastName": "={{ $json.body.lastName }}",
+            "email": "={{ $json.body.email }}",
+            "company": "={{ $json.body.company }}",
+            "serviceType": "={{ $json.body.serviceType }}",
+            "message": "={{ $json.body.message }}",
+            "gdprConsent": "={{ $json.body.gdprConsent }}",
+            "phoneNumber": "={{ $json.body.phoneNumber }}",
+            "createdAt": "={{ $json.body.createdAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "firstName",
+              "displayName": "firstName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lastName",
+              "displayName": "lastName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phoneNumber",
+              "displayName": "phoneNumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "serviceType",
+              "displayName": "serviceType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gdprConsent",
+              "displayName": "gdprConsent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        840,
+        0
+      ],
+      "id": "14512f26-8582-4d2f-bfd2-e09da9c21564",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "CMGmbeMAw5Qe0Idw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "errakibianas8@gmail.com",
+        "toEmail": "={{ $('Google Sheets').item.json.email }}",
+        "subject": "Votre demande chez Communik via IA",
+        "html": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1580,
+        0
+      ],
+      "id": "cccb0382-ae3d-4d77-9b9c-36bc4a0e5bdd",
+      "name": "Send Email",
+      "webhookId": "3ca81ff1-3098-43fd-9086-0372df61e9da",
+      "credentials": {
+        "smtp": {
+          "id": "KoT6LZvvUQdBTRxW",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C08QBDYC1HD",
+          "mode": "list",
+          "cachedResultName": "n8ncummunikai"
+        },
+        "text": "=Bonjour {{ $('Google Sheets').item.json.firstName }} {{ $('Google Sheets').item.json.lastName }}, merci de nous avoir contactés chez Communik via IA ! Nous avons bien reçu votre demande concernant {{ $('Google Sheets').item.json.serviceType }}. Un email avec une proposition personnalisée et un lien pour réserver un appel vous a été envoyé. À très bientôt ! 😊",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1780,
+        0
+      ],
+      "id": "33d93cd0-cf1c-409a-a671-dc7561b2d3d7",
+      "name": "Slack",
+      "webhookId": "ec2abb7f-3847-4845-a205-f2ba38129f23",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "MYmui906rnesK3rJ",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyB2KCz3SPb-ZuQibZ52zYvURJIUPyusWGY",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Tu es un assistant commercial pour une agence marketing nommée Communik via IA. Voici une demande de client :\\n\\nNom: {{ $json.firstName }} {{ $json.lastName }} \\nEmail: {{ $json.email }} \\nMessage: {{ $json.message }} \\nService demandé: {{ $json.serviceType }} \\n\\nRéponds avec un résumé, une offre adaptée, et une catégorie (branding, site web, IA, automatisation). Mon Nom est Anas ER-RAKIBI, Numéro de Téléphone: 0696486911, Site Web: communik-ai.vercel.app, email: errakibianasdev@gmail.com\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "74d949f5-f260-4a42-8a5d-3497b3122f8c",
+      "name": "Generate Content"
+    },
+    {
+      "parameters": {
+        "jsCode": "const markdown = $json.candidates[0].content.parts[0].text;\n\n// Convert basic Markdown to HTML\nlet html = markdown\n  .replace(/^### (.*$)/gim, '<h3>$1</h3>')\n  .replace(/^## (.*$)/gim, '<h2>$1</h2>')\n  .replace(/^# (.*$)/gim, '<h1>$1</h1>')\n  .replace(/\\*\\*(.*?)\\*\\*/gim, '<strong>$1</strong>')\n  .replace(/\\*(.*?)\\*/gim, '<em>$1</em>')\n  .replace(/\\n/gim, '<br>');\n\n// Ajouter le lien Calendly à la fin\nhtml += '<br><br><strong>📅 Planifiez un appel avec nous :</strong><br>';\nhtml += '<a href=\"https://calendly.com/errakibianas8\" target=\"_blank\">Cliquez ici pour réserver un créneau</a>';\n\nreturn [{ json: { html, email: $json.email } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        0
+      ],
+      "id": "53cb7c50-608a-4ae5-90f2-13d4607cb1d6",
+      "name": "Convertisseur Markdown"
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $json.body.message;\n$json.body.message = content.replace(/\\n/g, ' ');\nreturn $json;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        0
+      ],
+      "id": "96898ced-04b2-4458-aa0a-9c2d5a7da485",
+      "name": "Suppression des \\n"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Suppression des \\n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Generate Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "main": [
+        [
+          {
+            "node": "Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack": {
+      "main": [
+        []
+      ]
+    },
+    "Generate Content": {
+      "main": [
+        [
+          {
+            "node": "Convertisseur Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertisseur Markdown": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Suppression des \\n": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "092b283e-a7c7-4d97-920e-68c9307f947e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "65ed09b1fd7959c2fad3abd03d1fde6cc4a65686f00a4e692f16e545e19e9c96"
+  },
+  "id": "fSVXAq8KaaDaOxlh",
+  "tags": []
+}
