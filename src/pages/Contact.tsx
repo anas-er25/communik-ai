@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import axios from 'axios';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -15,6 +15,7 @@ const Contact = () => {
     firstName: '',
     lastName: '',
     email: '',
+    phoneNumber: '',
     company: '',
     serviceType: '',
     message: '',
@@ -35,7 +36,7 @@ const Contact = () => {
     setFormData(prev => ({ ...prev, gdprConsent: checked }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.gdprConsent) {
@@ -49,10 +50,14 @@ const Contact = () => {
 
     setIsSubmitting(true);
 
-    // Simuler un envoi de formulaire
-    setTimeout(() => {
-      console.log("Form submitted:", formData);
-      
+    try {
+      const dataToSend = {
+        ...formData,
+        createdAt: new Date().toISOString()
+      };
+
+      const response = await axios.post('https://communik.app.n8n.cloud/webhook-test/form-webhook', dataToSend);
+
       toast({
         title: "Message envoyé !",
         description: "Nous vous répondrons dans les plus brefs délais.",
@@ -63,14 +68,21 @@ const Contact = () => {
         firstName: '',
         lastName: '',
         email: '',
+        phoneNumber: '',
         company: '',
         serviceType: '',
         message: '',
         gdprConsent: false,
       });
-      
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -219,15 +231,27 @@ const Contact = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="company">Entreprise</Label>
+                      <Label htmlFor="phoneNumber">Téléphone</Label>
                       <Input
-                        id="company"
-                        name="company"
-                        value={formData.company}
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        type="tel"
+                        value={formData.phoneNumber}
                         onChange={handleChange}
-                        placeholder="Nom de votre entreprise (optionnel)"
+                        placeholder="Votre numéro de téléphone"
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="company">Entreprise</Label>
+                    <Input
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      placeholder="Nom de votre entreprise (optionnel)"
+                    />
                   </div>
 
                   <div className="space-y-2">
@@ -260,20 +284,20 @@ const Contact = () => {
                   </div>
 
                   <div className="flex items-start space-x-2">
-                    <Checkbox 
-                      id="gdprConsent" 
+                    <Checkbox
+                      id="gdprConsent"
                       checked={formData.gdprConsent}
                       onCheckedChange={handleCheckboxChange}
                     />
                     <Label htmlFor="gdprConsent" className="text-sm text-gray-600">
-                      J'accepte que mes données soient traitées pour me recontacter concernant ma demande. 
+                      J'accepte que mes données soient traitées pour me recontacter concernant ma demande.
                       Pour en savoir plus sur la gestion de vos données et vos droits, consultez notre politique de confidentialité.
                     </Label>
                   </div>
 
-                  <Button 
-                    type="submit" 
-                    className="btn-primary w-full" 
+                  <Button
+                    type="submit"
+                    className="btn-primary w-full"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -322,28 +346,28 @@ const Contact = () => {
               <div>
                 <h3 className="text-xl font-semibold mb-3">Quel est le délai moyen pour un projet ?</h3>
                 <p className="text-gray-600">
-                  La durée dépend de la complexité du projet. Un site vitrine simple peut prendre 2-3 semaines, 
+                  La durée dépend de la complexité du projet. Un site vitrine simple peut prendre 2-3 semaines,
                   tandis qu'un projet plus complexe nécessitera 2-3 mois. Nous établissons toujours un calendrier précis au démarrage.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-3">Comment se déroule la collaboration ?</h3>
                 <p className="text-gray-600">
-                  Nous commençons par un appel ou une réunion pour comprendre vos besoins, puis nous établissons une proposition 
+                  Nous commençons par un appel ou une réunion pour comprendre vos besoins, puis nous établissons une proposition
                   détaillée. Une fois validée, nous travaillons par étapes avec des points de validation réguliers.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-3">Proposez-vous un support après la livraison du projet ?</h3>
                 <p className="text-gray-600">
-                  Oui, nous offrons un support technique après la livraison et proposons également des contrats de maintenance 
+                  Oui, nous offrons un support technique après la livraison et proposons également des contrats de maintenance
                   pour assurer le bon fonctionnement et l'évolution de votre projet.
                 </p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-3">Quel est le coût moyen d'un projet ?</h3>
                 <p className="text-gray-600">
-                  Les tarifs varient en fonction de la nature et de l'ampleur du projet. Nous établissons des devis personnalisés 
+                  Les tarifs varient en fonction de la nature et de l'ampleur du projet. Nous établissons des devis personnalisés
                   après avoir évalué précisément vos besoins. N'hésitez pas à nous contacter pour obtenir une estimation.
                 </p>
               </div>
