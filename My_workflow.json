@@ -141,7 +141,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        840,
+        760,
         0
       ],
       "id": "14512f26-8582-4d2f-bfd2-e09da9c21564",
@@ -159,7 +159,9 @@
         "toEmail": "={{ $('Google Sheets').item.json.email }}",
         "subject": "Votre demande chez Communik via IA",
         "html": "={{ $json.html }}",
-        "options": {}
+        "options": {
+          "appendAttribution": false
+        }
       },
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
@@ -208,25 +210,7 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyB2KCz3SPb-ZuQibZ52zYvURJIUPyusWGY",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Tu es un assistant commercial pour une agence marketing nommée Communik via IA. Voici une demande de client :\\n\\nNom: {{ $json.firstName }} {{ $json.lastName }} \\nEmail: {{ $json.email }} \\nMessage: {{ $json.message }} \\nService demandé: {{ $json.serviceType }} \\n\\nRéponds avec un résumé, une offre adaptée, et une catégorie (branding, site web, IA, automatisation). Mon Nom est Anas ER-RAKIBI, Numéro de Téléphone: 0696486911, Site Web: communik-ai.vercel.app, email: errakibianasdev@gmail.com\"\n        }\n      ]\n    }\n  ]\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1120,
-        0
-      ],
-      "id": "74d949f5-f260-4a42-8a5d-3497b3122f8c",
-      "name": "Generate Content"
-    },
-    {
-      "parameters": {
-        "jsCode": "const markdown = $json.candidates[0].content.parts[0].text;\n\n// Convert basic Markdown to HTML\nlet html = markdown\n  .replace(/^### (.*$)/gim, '<h3>$1</h3>')\n  .replace(/^## (.*$)/gim, '<h2>$1</h2>')\n  .replace(/^# (.*$)/gim, '<h1>$1</h1>')\n  .replace(/\\*\\*(.*?)\\*\\*/gim, '<strong>$1</strong>')\n  .replace(/\\*(.*?)\\*/gim, '<em>$1</em>')\n  .replace(/\\n/gim, '<br>');\n\n// Ajouter le lien Calendly à la fin\nhtml += '<br><br><strong>📅 Planifiez un appel avec nous :</strong><br>';\nhtml += '<a href=\"https://calendly.com/errakibianas8\" target=\"_blank\">Cliquez ici pour réserver un créneau</a>';\n\nreturn [{ json: { html, email: $json.email } }];\n"
+        "jsCode": "const markdown = $input.first().json.output;\n\n// Convert basic Markdown to HTML\nlet html = markdown\n  .replace(/^### (.*$)/gim, '<h3>$1</h3>')\n  .replace(/^## (.*$)/gim, '<h2>$1</h2>')\n  .replace(/^# (.*$)/gim, '<h1>$1</h1>')\n  .replace(/\\*\\*(.*?)\\*\\*/gim, '<strong>$1</strong>')\n  .replace(/\\*(.*?)\\*/gim, '<em>$1</em>')\n  .replace(/\\n/gim, '<br>');\n\n// Ajouter le lien Calendly à la fin\nhtml += '<br><br><strong>📅 Planifiez un appel avec nous :</strong><br>';\nhtml += '<a href=\"https://calendly.com/errakibianas8\" target=\"_blank\">Cliquez ici pour réserver un créneau</a>';\n\nreturn [{ json: { html } }];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -249,6 +233,57 @@
       ],
       "id": "96898ced-04b2-4458-aa0a-9c2d5a7da485",
       "name": "Suppression des \\n"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message }}",
+        "options": {
+          "systemMessage": "=Tu es un assistant commercial pour une agence marketing nommée Communik via IA.\nVoici une demande client avec les informations suivantes :\nNom : {{ $json.firstName }} {{ $json.lastName }}\nEmail : {{ $json.email }}\nMessage : {{ $json.message }}\nService demandé : {{ $json.serviceType }}\nGénère une réponse professionnelle, chaleureuse et personnalisée, incluant :\nUn résumé clair de la demande.\nUne offre adaptée selon le service demandé.\nLa catégorie du service (choisis entre : Branding, Site Web, IA, Automatisation).\nLes informations de contact suivantes à la fin :\n📞 Anas ER-RAKIBI – 0696486911\n🌐 https://communik-ai.vercel.app\n📧 errakibianasdev@gmail.com\nNe donne aucune instruction dans la réponse, uniquement le message final à envoyer au client."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1020,
+        0
+      ],
+      "id": "1601f28e-43e3-41ce-909d-b6c15487b0d0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        240
+      ],
+      "id": "c30a1006-c513-432c-9973-d3aba3ac4886",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nS5B7W7NOp4BEbTP",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.phoneNumber }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1180,
+        240
+      ],
+      "id": "5286e97a-6c47-4d87-9564-e651f25b8420",
+      "name": "Simple Memory"
     }
   ],
   "pinData": {},
@@ -268,7 +303,7 @@
       "main": [
         [
           {
-            "node": "Generate Content",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -289,17 +324,6 @@
     "Slack": {
       "main": [
         []
-      ]
-    },
-    "Generate Content": {
-      "main": [
-        [
-          {
-            "node": "Convertisseur Markdown",
-            "type": "main",
-            "index": 0
-          }
-        ]
       ]
     },
     "Convertisseur Markdown": {
@@ -323,13 +347,48 @@
           }
         ]
       ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Convertisseur Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "fSVXAq8KaaDaOxlh"
   },
-  "versionId": "092b283e-a7c7-4d97-920e-68c9307f947e",
+  "versionId": "5c9ef021-c0ab-4e7c-b38a-2e3b28c4a0f2",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "65ed09b1fd7959c2fad3abd03d1fde6cc4a65686f00a4e692f16e545e19e9c96"

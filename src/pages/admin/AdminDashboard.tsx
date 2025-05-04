@@ -460,9 +460,6 @@ const AdminDashboard: React.FC = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[50px]">
-                      <Checkbox id="select-all" />
-                    </TableHead>
                     <TableHead>Contact</TableHead>
                     <TableHead>Service</TableHead>
                     <TableHead>Date</TableHead>
@@ -477,9 +474,6 @@ const AdminDashboard: React.FC = () => {
                   {filteredLeads.length > 0 ? (
                     filteredLeads.map((lead) => (
                       <TableRow key={lead.id}>
-                        <TableCell>
-                          <Checkbox id={`select-${lead.id}`} />
-                        </TableCell>
                         <TableCell>
                           <div className="font-medium">{lead.firstName} {lead.lastName}</div>
                           <div className="text-sm text-muted-foreground">{lead.email}</div>
