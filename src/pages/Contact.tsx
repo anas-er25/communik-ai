@@ -56,7 +56,7 @@ const Contact = () => {
         createdAt: new Date().toISOString()
       };
 
-      const response = await axios.post('https://communik.app.n8n.cloud/webhook-test/form-webhook', dataToSend);
+      const response = await axios.post(import.meta.env.VITE_N8N_WEBHOOK, dataToSend);
 
       toast({
         title: "Message envoyé !",
