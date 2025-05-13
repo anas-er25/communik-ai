@@ -101,7 +101,7 @@ const Services = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-communikAI-blue text-white py-20">
+      <section className="bg-gradient-to-r from-communikAI-blue to-communikAI-red text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -117,15 +117,15 @@ const Services = () => {
           </div>
         </div>
       </section>
-
+      <div className="w-auto h-[0.5px] bg-gradient-to-r from-communikAI-gray to-communikAI-lightred mx-auto"></div>
       {/* Main Services Section */}
-      <section className="section-padding">
+      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Une approche intégrée pour votre succès digital
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white">
               Nous combinons expertise créative, maîtrise technologique et
               innovation pour vous offrir des solutions complètes et adaptées à
               vos objectifs.
@@ -134,10 +134,10 @@ const Services = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {mainServices.map((service, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg p-10">
+              <div key={index} className="bg-red-200 rounded-lg shadow-lg p-10">
                 <div className="mb-6">{service.icon}</div>
                 <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-                <p className="text-gray-600 mb-8">{service.description}</p>
+                <p className="text-gray-500 mb-8">{service.description}</p>
                 <ul className="space-y-3 mb-8">
                   {service.features.map((feature, i) => (
                     <li key={i} className="flex items-start">
@@ -161,13 +161,13 @@ const Services = () => {
       </section>
 
       {/* Process Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Notre processus de travail
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white">
               Une méthodologie éprouvée pour garantir le succès de vos projets,
               de la conception à la livraison.
             </p>
@@ -177,13 +177,13 @@ const Services = () => {
             {process.map((step, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-lg shadow-md border-t-4 border-communikAI-red"
+                className="bg-red-200 p-8 rounded-lg shadow-md border-t-4 border-communikAI-red"
               >
                 <div className="text-4xl font-bold text-communikAI-red mb-4">
                   {step.number}
                 </div>
                 <h3 className="text-xl font-bold mb-4">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
+                <p className="text-gray-500">{step.description}</p>
               </div>
             ))}
           </div>
@@ -191,22 +191,22 @@ const Services = () => {
       </section>
 
       {/* Technologies Section */}
-      <section className="section-padding">
+      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Technologies et outils
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white">
               Nous utilisons les technologies les plus récentes et les plus
               adaptées pour répondre à vos besoins spécifiques.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-10">
+          <div className="bg-red-200 rounded-lg shadow-lg p-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center p-4">
-                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                <div className="bg-red-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-communikAI-blue">
                     AI
                   </span>
@@ -214,7 +214,7 @@ const Services = () => {
                 <p className="font-medium">Intelligence Artificielle</p>
               </div>
               <div className="text-center p-4">
-                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                <div className="bg-red-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-communikAI-blue">
                     UX
                   </span>
@@ -222,7 +222,7 @@ const Services = () => {
                 <p className="font-medium">Design UX/UI</p>
               </div>
               <div className="text-center p-4">
-                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                <div className="bg-red-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-communikAI-blue">
                     Web
                   </span>
@@ -230,7 +230,7 @@ const Services = () => {
                 <p className="font-medium">Technologies Web</p>
               </div>
               <div className="text-center p-4">
-                <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                <div className="bg-red-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-communikAI-blue">
                     Auto
                   </span>

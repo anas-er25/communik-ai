@@ -421,7 +421,7 @@ const AdminDashboard: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="container flex items-center justify-center min-h-[60vh]">
+      <div className="container flex items-center justify-center min-h-[60vh] bg-red-200">
         <div className="text-center">
           <div className="flex items-center justify-center mb-4">
             <svg
@@ -452,11 +452,11 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="container px-4 py-8">
+    <div className="container px-4 py-8 bg-gradient-to-r from-communikAI-blue to-communikAI-red">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold mb-2">Tableau de Bord Admin</h1>
-          <p className="text-gray-600">
+          <p className="text-white">
             Gérez vos leads et suivez leur progression
           </p>
         </div>
@@ -467,13 +467,13 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       <Tabs defaultValue="leads" className="mb-8">
-        <TabsList className="mb-6">
+        <TabsList className="bg-red-200 mb-6">
           <TabsTrigger value="leads">Leads</TabsTrigger>
           <TabsTrigger value="analytics">Analytiques</TabsTrigger>
         </TabsList>
 
         <TabsContent value="leads">
-          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <div className="bg-red-200 rounded-lg shadow-sm p-6 mb-6">
             <div className="flex flex-col md:flex-row md:items-end gap-4 mb-6">
               <div className="flex-grow">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -486,7 +486,7 @@ const AdminDashboard: React.FC = () => {
                     placeholder="Rechercher par nom, email, entreprise..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-9"
+                    className="pl-9 bg-red-50"
                   />
                 </div>
               </div>

@@ -113,6 +113,7 @@ const Contact = () => {
           </div>
         </div>
       </section>
+      <div className="w-auto h-[0.5px] bg-gradient-to-r from-communikAI-gray to-communikAI-lightred mx-auto"></div>
 
       {/* Contact Form Section */}
       <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red ">
@@ -120,7 +121,7 @@ const Contact = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Contact Info */}
-              <div className="bg-gray-50 p-8 rounded-lg">
+              <div className="bg-red-100 p-8 rounded-lg">
                 <h2 className="text-2xl font-bold mb-6">
                   Informations de contact
                 </h2>
@@ -181,7 +182,7 @@ const Contact = () => {
                   <div className="flex space-x-4">
                     <a
                       href="#"
-                      className="bg-gray-200 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
+                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +200,7 @@ const Contact = () => {
                     </a>
                     <a
                       href="#"
-                      className="bg-gray-200 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
+                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +227,7 @@ const Contact = () => {
                     </a>
                     <a
                       href="#"
-                      className="bg-gray-200 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
+                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +247,7 @@ const Contact = () => {
                     </a>
                     <a
                       href="#"
-                      className="bg-gray-200 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
+                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -284,6 +285,7 @@ const Contact = () => {
                         onChange={handleChange}
                         placeholder="Votre prénom"
                         required
+                        className="bg-red-100"
                       />
                     </div>
                     <div className="space-y-2">
@@ -297,6 +299,7 @@ const Contact = () => {
                         onChange={handleChange}
                         placeholder="Votre nom"
                         required
+                        className="bg-red-100"
                       />
                     </div>
                   </div>
@@ -314,6 +317,7 @@ const Contact = () => {
                         onChange={handleChange}
                         placeholder="votre@email.com"
                         required
+                        className="bg-red-100"
                       />
                     </div>
                     <div className="space-y-2">
@@ -325,6 +329,7 @@ const Contact = () => {
                         value={formData.phoneNumber}
                         onChange={handleChange}
                         placeholder="Votre numéro de téléphone"
+                        className="bg-red-100"
                       />
                     </div>
                   </div>
@@ -337,6 +342,7 @@ const Contact = () => {
                       value={formData.company}
                       onChange={handleChange}
                       placeholder="Nom de votre entreprise (optionnel)"
+                      className="bg-red-100"
                     />
                   </div>
 
@@ -345,6 +351,7 @@ const Contact = () => {
                       Type de service <span className="text-red-500">*</span>
                     </Label>
                     <Select
+                      className="bg-red-100"
                       onValueChange={handleSelectChange}
                       value={formData.serviceType}
                     >
@@ -375,6 +382,7 @@ const Contact = () => {
                       placeholder="Décrivez votre projet ou votre demande"
                       rows={6}
                       required
+                      className="bg-red-100"
                     />
                   </div>
 
@@ -384,10 +392,7 @@ const Contact = () => {
                       checked={formData.gdprConsent}
                       onCheckedChange={handleCheckboxChange}
                     />
-                    <Label
-                      htmlFor="gdprConsent"
-                      className="text-sm text-white"
-                    >
+                    <Label htmlFor="gdprConsent" className="text-sm text-white">
                       J'accepte que mes données soient traitées pour me
                       recontacter concernant ma demande. Pour en savoir plus sur
                       la gestion de vos données et vos droits, consultez notre
@@ -439,14 +444,14 @@ const Contact = () => {
       </section>
 
       {/* Map Section */}
-      <section className="section-padding bg-gray-50 py-0">
+      <section className="section-padding bg-red-400 py-0">
         <div className="overflow-hidden rounded-lg border">
           <iframe
             title="Carte Google Maps"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.2712013001124!2d-8.030016025224263!3d31.640861541180602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef96ad478ef9%3A0x9a4265bf810cd3da!2sCOMMUNIK!5e1!3m2!1sen!2sma!4v1746218886829!5m2!1sen!2sma"
             width="100%"
             height="400"
-            style={{ border: 0 }}
+            style={{ border: 0, borderColor: "transparent" }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
@@ -454,7 +459,7 @@ const Contact = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="section-padding">
+      <section className="section-padding bg-gradient-to-r from-communikAI-gray to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold mb-12 text-center">
@@ -465,7 +470,7 @@ const Contact = () => {
                 <h3 className="text-xl font-semibold mb-3">
                   Quel est le délai moyen pour un projet ?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-white">
                   La durée dépend de la complexité du projet. Un site vitrine
                   simple peut prendre 2-3 semaines, tandis qu'un projet plus
                   complexe nécessitera 2-3 mois. Nous établissons toujours un
@@ -476,7 +481,7 @@ const Contact = () => {
                 <h3 className="text-xl font-semibold mb-3">
                   Comment se déroule la collaboration ?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-white">
                   Nous commençons par un appel ou une réunion pour comprendre
                   vos besoins, puis nous établissons une proposition détaillée.
                   Une fois validée, nous travaillons par étapes avec des points
@@ -487,7 +492,7 @@ const Contact = () => {
                 <h3 className="text-xl font-semibold mb-3">
                   Proposez-vous un support après la livraison du projet ?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-white">
                   Oui, nous offrons un support technique après la livraison et
                   proposons également des contrats de maintenance pour assurer
                   le bon fonctionnement et l'évolution de votre projet.
@@ -497,7 +502,7 @@ const Contact = () => {
                 <h3 className="text-xl font-semibold mb-3">
                   Quel est le coût moyen d'un projet ?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-white">
                   Les tarifs varient en fonction de la nature et de l'ampleur du
                   projet. Nous établissons des devis personnalisés après avoir
                   évalué précisément vos besoins. N'hésitez pas à nous contacter
