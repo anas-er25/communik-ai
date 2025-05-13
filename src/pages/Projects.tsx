@@ -100,7 +100,7 @@ const Projects = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-communikAI-blue text-white py-20">
+      <section className="bg-gradient-to-r from-communikAI-blue to-communikAI-red text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -116,15 +116,16 @@ const Projects = () => {
           </div>
         </div>
       </section>
+      <div className="w-auto h-[0.5px] bg-gradient-to-r from-communikAI-gray to-communikAI-lightred mx-auto"></div>
 
       {/* Projects Grid */}
-      <section className="section-padding">
+      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Études de cas
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white">
               Chaque projet est une aventure unique, avec des défis spécifiques
               et des solutions personnalisées. Voici quelques exemples de notre
               travail.
@@ -135,7 +136,7 @@ const Projects = () => {
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden group"
+                className="bg-red-100 rounded-lg shadow-lg overflow-hidden group"
               >
                 <div className="h-56 overflow-hidden">
                   <img
@@ -169,7 +170,7 @@ const Projects = () => {
                   id={`modal-${project.id}`}
                   className="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
                 >
-                  <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="bg-red-100 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
                     <div className="h-72 overflow-hidden">
                       <img
                         src={project.image}
@@ -252,7 +253,7 @@ const Projects = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

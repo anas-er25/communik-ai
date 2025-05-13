@@ -83,7 +83,7 @@ const Team = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-communikAI-blue text-white py-20">
+      <section className="bg-gradient-to-r from-communikAI-blue to-communikAI-red text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -99,15 +99,16 @@ const Team = () => {
           </div>
         </div>
       </section>
+      <div className="w-auto h-[0.5px] bg-gradient-to-r from-communikAI-gray to-communikAI-lightred mx-auto"></div>
 
       {/* Team Introduction */}
-      <section className="section-padding">
+      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Les talents derrière CommunikAI
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white">
               Notre force réside dans la diversité des compétences et des
               parcours de notre équipe. Ensemble, nous associons créativité,
               expertise technique et vision stratégique pour vous accompagner
@@ -128,7 +129,7 @@ const Team = () => {
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
-                <div className="p-6">
+                <div className="p-6 bg-red-100">
                   <h3 className="text-xl font-bold mb-1">{member.name}</h3>
                   <p className="text-communikAI-red font-medium mb-4">
                     {member.role}
@@ -177,11 +178,11 @@ const Team = () => {
       </section>
 
       {/* Company Values */}
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Nos valeurs</h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white">
               Ces principes guident notre approche et définissent notre culture
               d'entreprise.
             </p>
@@ -189,7 +190,7 @@ const Team = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {values.map((value, index) => (
-              <div key={index} className="bg-white p-8 rounded-lg shadow-md">
+              <div key={index} className="bg-red-100 p-8 rounded-lg shadow-md">
                 <h3 className="text-xl font-bold mb-4 text-communikAI-red">
                   {value.title}
                 </h3>
@@ -201,7 +202,7 @@ const Team = () => {
       </section>
 
       {/* Join Us Section */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -209,7 +210,7 @@ const Team = () => {
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   Rejoignez notre équipe
                 </h2>
-                <p className="text-lg text-gray-600 mb-8">
+                <p className="text-lg text-white mb-8">
                   Nous sommes toujours à la recherche de talents passionnés pour
                   rejoindre notre équipe et contribuer à des projets innovants.
                 </p>
@@ -217,7 +218,7 @@ const Team = () => {
                   <Button className="btn-primary">Postuler</Button>
                 </Link>
               </div>
-              <div className="bg-communikAI-red bg-opacity-10 p-8 rounded-lg">
+              <div className="bg-communikAI-lightred bg-opacity-10 p-8 rounded-lg">
                 <h3 className="text-xl font-bold mb-4">
                   Pourquoi travailler chez CommunikAI ?
                 </h3>

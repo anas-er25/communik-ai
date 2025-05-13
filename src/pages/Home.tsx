@@ -122,7 +122,7 @@ const Home = () => {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                className="bg-red-100 p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow"
               >
                 <div className="mb-5">{service.icon}</div>
                 <h3 className="text-xl font-bold mb-3">{service.title}</h3>
@@ -140,7 +140,7 @@ const Home = () => {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="section-padding">
+      <section className="section-padding bg-gradient-to-r from-communikAI-lightblue to-communikAI-lightred">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -205,7 +205,7 @@ const Home = () => {
             </div>
             <div className="relative">
               <div className="bg-gradient-to-tr from-communikAI-red to-communikAI-lightred rounded-lg h-64 md:h-96 w-full"></div>
-              <div className="absolute inset-0 bg-white bg-opacity-90 m-4 rounded-lg shadow-xl p-8 flex flex-col justify-center">
+              <div className="absolute inset-0 bg-red-100 bg-opacity-90 m-4 rounded-lg shadow-xl p-8 flex flex-col justify-center">
                 <h3 className="text-2xl font-bold mb-4">Notre approche</h3>
                 <p className="text-gray-600 mb-6">
                   Nous associons stratégie, créativité et technologie pour
@@ -266,12 +266,12 @@ const Home = () => {
       </section>
 
       {/* Clients Section */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-gradient-to-r from-communikAI-lightblue to-communikAI-lightred">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center items-center">
             {clients.map((client, index) => (
               <div key={index} className="px-8 py-4">
-                <p className="text-gray-400 font-medium text-xl">{client}</p>
+                <p className="text-gray-700 font-medium text-xl">{client}</p>
               </div>
             ))}
           </div>
