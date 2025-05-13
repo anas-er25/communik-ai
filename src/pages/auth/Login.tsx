@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +14,10 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, signInWithGoogle, signInWithGithub } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Get the redirect path from location state or default to "/admin"
+  const from = location.state?.from || "/admin";
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +25,7 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      navigate("/admin");
+      navigate(from);
     } catch (error) {
       console.error(error);
     } finally {
@@ -34,7 +37,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       await signInWithGoogle();
-      navigate("/admin");
+      navigate(from);
     } catch (error) {
       console.error(error);
     } finally {
@@ -46,7 +49,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       await signInWithGithub();
-      navigate("/admin");
+      navigate(from);
     } catch (error) {
       console.error(error);
     } finally {

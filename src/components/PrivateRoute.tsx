@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
@@ -42,14 +43,14 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     );
   }
 
-  // Not logged in - redirect to login
+  // Not logged in - redirect to login with a return path
   if (!currentUser) {
     toast({
       title: "Accès refusé",
       description: "Veuillez vous connecter pour accéder à cette page.",
       variant: "destructive",
     });
-    return <Navigate to="/auth/login" state={{ from: location }} replace />;
+    return <Navigate to="/auth/login" state={{ from: location.pathname }} replace />;
   }
 
   // User is authenticated, render the protected route
