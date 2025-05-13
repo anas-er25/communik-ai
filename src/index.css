@@ -1,5 +1,4 @@
 
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
 
 @tailwind base;
@@ -86,7 +85,7 @@
 
 @layer components {
   .hero-gradient {
-    background: linear-gradient(90deg, #121212 0%, #303030 100%);
+    @apply bg-gradient-to-r from-theme-black to-theme-charcoal;
   }
 
   .section-padding {
@@ -98,18 +97,48 @@
   }
 
   .btn-primary {
-    @apply bg-theme-red text-white hover:bg-opacity-90 transition-all duration-300 font-medium px-6 py-3 rounded-md;
+    @apply bg-theme-red text-white hover:bg-theme-darkRed transition-all duration-300 font-medium px-6 py-3 rounded-md shadow-lg;
   }
 
   .btn-outline {
-    @apply border border-theme-red text-theme-red hover:bg-theme-red hover:text-white transition-all duration-300 font-medium px-6 py-3 rounded-md;
+    @apply border-2 border-theme-red text-theme-red hover:bg-theme-red hover:text-white hover:border-theme-darkRed transition-all duration-300 font-medium px-6 py-3 rounded-md;
   }
 
   .card-gradient {
-    @apply bg-gradient-to-br from-theme-black to-theme-gray/80 backdrop-blur-sm;
+    @apply bg-gradient-to-br from-theme-black to-theme-gray/90 backdrop-blur-sm;
   }
   
   .red-glow {
-    @apply shadow-[0_0_15px_rgba(234,56,76,0.5)];
+    @apply shadow-[0_0_20px_rgba(234,56,76,0.6)];
+  }
+  
+  .glass-card {
+    @apply bg-black/30 backdrop-blur-md border border-theme-red/20 rounded-lg;
+  }
+  
+  .glass-dark {
+    @apply bg-theme-black/70 backdrop-blur-sm border border-theme-gray/20 rounded-lg;
+  }
+  
+  .highlight-text {
+    @apply text-theme-brightRed font-semibold;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold mb-6 relative;
+  }
+  
+  .section-title::after {
+    content: "";
+    @apply absolute bottom-0 left-0 h-1 w-16 bg-theme-red;
+    transform: translateY(8px);
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+  
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
   }
 }

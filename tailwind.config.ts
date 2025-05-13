@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -62,7 +63,7 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Notre palette personnalisée
+        // Enhanced palette with refined red and black theme
         communikAI: {
           blue: "#1A1F2C",
           red: "#ea384c",
@@ -70,14 +71,17 @@ export default {
           lightblue: "#A0D8EF",
           gray: "#8E9196",
         },
-        // New red and black theme colors
+        // Refined red and black theme colors
         theme: {
           red: "#ea384c",
           darkRed: "#c41c30",
-          black: "#000000",
-          darkBlack: "#121212",
+          brightRed: "#ff455b",
+          softRed: "#ff6b7d",
+          black: "#121212",
+          darkBlack: "#080808",
           gray: "#303030",
           lightGray: "#484848",
+          charcoal: "#1e1e1e",
         },
       },
       borderRadius: {
@@ -139,6 +143,12 @@ export default {
         "black-red-gradient":
           "linear-gradient(135deg, #121212 0%, #ea384c 100%)",
         "dark-gradient": "linear-gradient(to right, #000000 0%, #303030 100%)",
+        "red-glow-gradient": 
+          "linear-gradient(135deg, #ff455b 0%, #c41c30 100%)",
+        "charcoal-gradient": 
+          "linear-gradient(to right, #121212 0%, #1e1e1e 100%)",
+        "dark-red-gradient": 
+          "linear-gradient(135deg, #c41c30 0%, #080808 100%)",
       },
     },
   },

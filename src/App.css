@@ -36,23 +36,32 @@
 
 .card {
   padding: 2em;
-  background: linear-gradient(135deg, #121212 0%, #303030 100%);
+  background: linear-gradient(135deg, #1e1e1e 0%, #303030 100%);
   border: 1px solid #ea384c33;
   border-radius: 8px;
   color: white;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.3), 0 0 15px rgba(234,56,76,0.3);
 }
 
 .read-the-docs {
   color: #888;
 }
 
-/* Red and black theme specific styles */
+/* Enhanced Red and Black theme specific styles */
 .red-accent {
   color: #ea384c;
+  font-weight: 500;
 }
 
 .gradient-bg {
   background: linear-gradient(135deg, #121212 0%, #303030 100%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .gradient-button {
@@ -62,10 +71,37 @@
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
   font-weight: 500;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
 }
 
 .gradient-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(234, 56, 76, 0.3);
+  box-shadow: 0 4px 12px rgba(234, 56, 76, 0.4);
+  background: linear-gradient(135deg, #ff455b 0%, #ea384c 100%);
+}
+
+.glass-effect {
+  background: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(234, 56, 76, 0.2);
+  border-radius: 8px;
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #121212, #1e1e1e, #c41c30, #ea384c);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
