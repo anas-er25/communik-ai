@@ -30,7 +30,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   LogOut,
   Filter,
@@ -418,6 +417,33 @@ const AdminDashboard: React.FC = () => {
       </div>
     );
   };
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const paginatedLeads = filteredLeads.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredLeads.length / itemsPerPage);
+
+  const [sortKey, setSortKey] = useState<keyof Lead | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  const sortedLeads = [...filteredLeads].sort((a, b) => {
+    if (!sortKey) return 0;
+
+    const aValue = a[sortKey];
+    const bValue = b[sortKey];
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return sortOrder === "asc"
+      ? String(aValue).localeCompare(String(bValue))
+      : String(bValue).localeCompare(String(aValue));
+  });
 
   if (isLoading) {
     return (
@@ -585,7 +611,7 @@ const AdminDashboard: React.FC = () => {
                 </TableHeader>
                 <TableBody>
                   {filteredLeads.length > 0 ? (
-                    filteredLeads.map((lead) => (
+                    paginatedLeads.map((lead) => (
                       <TableRow key={lead.id}>
                         <TableCell>
                           <div className="font-medium">
@@ -808,6 +834,31 @@ const AdminDashboard: React.FC = () => {
           </div>
         </TabsContent>
       </Tabs>
+      <div className="flex justify-between items-center mt-4">
+        <span className="text-sm text-muted-foreground">
+          Page {currentPage} sur {totalPages}
+        </span>
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          >
+            Précédent
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === totalPages}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+          >
+            Suivant
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
