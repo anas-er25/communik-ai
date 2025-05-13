@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -12,10 +13,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #ea384caa);
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em #ea384caa);
 }
 
 @keyframes logo-spin {
@@ -35,8 +36,36 @@
 
 .card {
   padding: 2em;
+  background: linear-gradient(135deg, #121212 0%, #303030 100%);
+  border: 1px solid #ea384c33;
+  border-radius: 8px;
+  color: white;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+/* Red and black theme specific styles */
+.red-accent {
+  color: #ea384c;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #121212 0%, #303030 100%);
+}
+
+.gradient-button {
+  background: linear-gradient(135deg, #ea384c 0%, #c41c30 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.gradient-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(234, 56, 76, 0.3);
 }

@@ -39,11 +39,11 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-white shadow-sm py-4 sticky top-0 z-50">
+    <nav className="bg-theme-black text-white shadow-sm py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
-          <span className="text-xl font-heading font-bold text-communikAI-blue">
-            Communik<span className="text-communikAI-purple">AI</span>
+          <span className="text-xl font-heading font-bold text-white">
+            Communik<span className="text-theme-red">AI</span>
           </span>
         </Link>
 
@@ -54,7 +54,7 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-gray-700 hover:text-communikAI-purple transition-colors font-medium"
+                className="text-gray-300 hover:text-theme-red transition-colors font-medium"
               >
                 {link.name}
               </Link>
@@ -64,28 +64,28 @@ const Navbar = () => {
           {currentUser ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button variant="ghost" size="icon" className="rounded-full text-white hover:text-theme-red">
                   {currentUser.photoURL ? (
                     <img 
                       src={currentUser.photoURL} 
                       alt="Profile" 
-                      className="h-8 w-8 rounded-full"
+                      className="h-8 w-8 rounded-full border border-theme-red"
                     />
                   ) : (
                     <User className="h-5 w-5" />
                   )}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <div className="p-2 text-sm">
+              <DropdownMenuContent align="end" className="bg-theme-black border border-theme-red">
+                <div className="p-2 text-sm text-white">
                   <span className="font-medium">{currentUser.displayName || currentUser.email}</span>
                 </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
+                <DropdownMenuSeparator className="bg-theme-gray" />
+                <DropdownMenuItem asChild className="text-white hover:text-theme-red hover:bg-theme-darkBlack">
                   <Link to="/profile" className="cursor-pointer">Mon profil</Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+                <DropdownMenuSeparator className="bg-theme-gray" />
+                <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-white hover:text-theme-red hover:bg-theme-darkBlack">
                   Se déconnecter
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -93,10 +93,10 @@ const Navbar = () => {
           ) : (
             <div className="flex space-x-2">
               <Link to="/auth/login">
-                <Button variant="outline">Connexion</Button>
+                <Button variant="outline" className="border-theme-red text-theme-red hover:bg-theme-red hover:text-white">Connexion</Button>
               </Link>
               <Link to="/auth/register">
-                <Button>S'inscrire</Button>
+                <Button className="bg-theme-red text-white hover:bg-theme-darkRed">S'inscrire</Button>
               </Link>
             </div>
           )}
@@ -104,7 +104,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 rounded-md text-gray-700"
+          className="md:hidden p-2 rounded-md text-white hover:text-theme-red"
           onClick={toggleMenu}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -113,13 +113,13 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white shadow-md py-4 px-4 absolute top-16 left-0 right-0 z-50 animate-fade-in">
+        <div className="md:hidden bg-theme-black shadow-md py-4 px-4 absolute top-16 left-0 right-0 z-50 animate-fade-in border-t border-theme-gray">
           <div className="flex flex-col space-y-4">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-gray-700 hover:text-communikAI-purple transition-colors py-2 px-4 font-medium"
+                className="text-gray-300 hover:text-theme-red transition-colors py-2 px-4 font-medium"
                 onClick={toggleMenu}
               >
                 {link.name}
@@ -128,8 +128,8 @@ const Navbar = () => {
             
             {currentUser ? (
               <>
-                <Link to="/profile" className="py-2 px-4" onClick={toggleMenu}>Mon profil</Link>
-                <Button variant="outline" className="justify-start" onClick={() => {
+                <Link to="/profile" className="py-2 px-4 text-gray-300 hover:text-theme-red" onClick={toggleMenu}>Mon profil</Link>
+                <Button variant="outline" className="justify-start border-theme-red text-theme-red hover:bg-theme-red hover:text-white" onClick={() => {
                   handleSignOut();
                   toggleMenu();
                 }}>
@@ -139,10 +139,10 @@ const Navbar = () => {
             ) : (
               <>
                 <Link to="/auth/login" onClick={toggleMenu}>
-                  <Button variant="outline" className="w-full">Connexion</Button>
+                  <Button variant="outline" className="w-full border-theme-red text-theme-red hover:bg-theme-red hover:text-white">Connexion</Button>
                 </Link>
                 <Link to="/auth/register" onClick={toggleMenu}>
-                  <Button className="w-full">S'inscrire</Button>
+                  <Button className="w-full bg-theme-red text-white hover:bg-theme-darkRed">S'inscrire</Button>
                 </Link>
               </>
             )}

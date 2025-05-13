@@ -69,6 +69,15 @@ export default {
 					purple: '#9B87F5',
 					lightPurple: '#D6BCFA',
 					gray: '#8E9196',
+				},
+				// New red and black theme colors
+				theme: {
+					red: '#ea384c',
+					darkRed: '#c41c30',
+					black: '#000000',
+					darkBlack: '#121212',
+					gray: '#303030',
+					lightGray: '#484848',
 				}
 			},
 			borderRadius: {
@@ -123,6 +132,11 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
 				'fade-out': 'fade-out 0.3s ease-out',
+			},
+			backgroundImage: {
+				'red-black-gradient': 'linear-gradient(135deg, #ea384c 0%, #121212 100%)',
+				'black-red-gradient': 'linear-gradient(135deg, #121212 0%, #ea384c 100%)',
+				'dark-gradient': 'linear-gradient(to right, #000000 0%, #303030 100%)',
 			}
 		}
 	},
