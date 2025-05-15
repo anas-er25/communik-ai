@@ -12,7 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 const Contact = () => {
@@ -75,7 +76,6 @@ const Contact = () => {
         description: "Nous vous répondrons dans les plus brefs délais.",
       });
 
-      // Reset form
       setFormData({
         firstName: "",
         lastName: "",
@@ -98,186 +98,206 @@ const Contact = () => {
     }
   };
 
+  // Animation variants for sections
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
+  // Animation variants for form fields and contact info
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  };
+
+  // Animation variants for buttons
+  const buttonVariants = {
+    hover: { scale: 1.1, transition: { duration: 0.3 } },
+    tap: { scale: 0.95 },
+  };
+
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-b from-theme-black via-theme-darkRed to-theme-black">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-communikAI-blue to-communikAI-red text-white py-20">
+      <motion.section
+        className="relative py-20 overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Contactez-nous
-            </h1>
-            <p className="text-xl text-gray-200">
-              Une question, un projet à discuter ? Nous sommes à votre écoute.
-            </p>
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold mb-6 text-white"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
+              Transformons vos idées en{" "}
+              <span className="text-theme-red">réalité</span>
+            </motion.h1>
+            <motion.p
+              className="text-xl text-gray-300 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
+              Une question ? Un projet ? Nous sommes là pour vous accompagner dans
+              votre transformation digitale.
+            </motion.p>
+            <motion.div
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <a href="#form" className="inline-flex items-center">
+                <Button className="bg-theme-red hover:bg-theme-brightRed text-white px-8 py-6 rounded-full">
+                  Commencer un projet
+                  <motion.div
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                  >
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </motion.div>
+                </Button>
+              </a>
+            </motion.div>
           </div>
         </div>
-      </section>
-      <div className="w-auto h-[0.5px] bg-gradient-to-r from-communikAI-gray to-communikAI-lightred mx-auto"></div>
+      </motion.section>
 
-      {/* Contact Form Section */}
-      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red ">
+      {/* Contact Section */}
+      <motion.section
+        className="py-20"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              {/* Contact Info */}
-              <div className="bg-red-100 p-8 rounded-lg">
-                <h2 className="text-2xl font-bold mb-6">
-                  Informations de contact
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
+            {/* Contact Info */}
+            <div className="space-y-12">
+              <motion.div variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                <h2 className="text-3xl font-bold text-white mb-8">
+                  Parlons de votre projet
                 </h2>
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-communikAI-red bg-opacity-10 p-3 rounded-full">
-                      <MapPin className="text-communikAI-red h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium mb-1">Adresse</h3>
-                      <p className="text-gray-600">
-                        123 Rue de l'Innovation, 75000 Paris
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-communikAI-red bg-opacity-10 p-3 rounded-full">
-                      <Mail className="text-communikAI-red h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium mb-1">Email</h3>
-                      <p className="text-gray-600">contact@communik-ai.fr</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-communikAI-red bg-opacity-10 p-3 rounded-full">
-                      <Phone className="text-communikAI-red h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium mb-1">Téléphone</h3>
-                      <p className="text-gray-600">+33 1 23 45 67 89</p>
-                    </div>
-                  </div>
-                </div>
+                <p className="text-gray-300 mb-8">
+                  Que vous ayez un projet concret ou simplement une idée, nous
+                  sommes là pour échanger et vous conseiller sur les meilleures
+                  solutions pour votre entreprise.
+                </p>
+              </motion.div>
 
-                <div className="mt-12">
-                  <h2 className="text-2xl font-bold mb-6">
-                    Horaires d'ouverture
-                  </h2>
-                  <div className="space-y-2">
-                    <p className="flex justify-between">
-                      <span className="font-medium">Lundi - Vendredi</span>
-                      <span className="text-gray-600">9h - 18h</span>
-                    </p>
-                    <p className="flex justify-between">
-                      <span className="font-medium">Samedi</span>
-                      <span className="text-gray-600">Sur rendez-vous</span>
-                    </p>
-                    <p className="flex justify-between">
-                      <span className="font-medium">Dimanche</span>
-                      <span className="text-gray-600">Fermé</span>
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-12">
-                  <h2 className="text-2xl font-bold mb-6">Suivez-nous</h2>
-                  <div className="flex space-x-4">
-                    <a
-                      href="#"
-                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
+              <div className="space-y-6">
+                {[
+                  {
+                    icon: <MapPin className="h-6 w-6 text-theme-red" />,
+                    title: "Notre bureau",
+                    content: "123 Rue de l'Innovation, 75000 Paris",
+                  },
+                  {
+                    icon: <Mail className="h-6 w-6 text-theme-red" />,
+                    title: "Email",
+                    content: "contact@communik-ai.fr",
+                  },
+                  {
+                    icon: <Phone className="h-6 w-6 text-theme-red" />,
+                    title: "Téléphone",
+                    content: "+33 1 23 45 67 89",
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    className="flex items-center space-x-4 text-gray-300"
+                    variants={itemVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.2 }}
+                  >
+                    <motion.div
+                      className="bg-theme-red bg-opacity-20 p-3 rounded-full"
+                      whileHover={{ scale: 1.2 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                      </svg>
-                    </a>
-                    <a
-                      href="#"
-                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <rect
-                          x="2"
-                          y="2"
-                          width="20"
-                          height="20"
-                          rx="5"
-                          ry="5"
-                        ></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                      </svg>
-                    </a>
-                    <a
-                      href="#"
-                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                        <rect x="2" y="9" width="4" height="12"></rect>
-                        <circle cx="4" cy="4" r="2"></circle>
-                      </svg>
-                    </a>
-                    <a
-                      href="#"
-                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
+                      {item.icon}
+                    </motion.div>
+                    <div>
+                      <h3 className="font-semibold text-white">{item.title}</h3>
+                      <p>{item.content}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
 
-              {/* Form */}
-              <div>
-                <h2 className="text-2xl font-bold mb-6">
-                  Envoyez-nous un message
-                </h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">
-                        Prénom <span className="text-red-500">*</span>
-                      </Label>
+              <motion.div
+                className="border-t border-gray-700 pt-8"
+                variants={itemVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                <h3 className="text-xl font-semibold text-white mb-4">
+                  Nos horaires
+                </h3>
+                <div className="space-y-2 text-gray-300">
+                  {[
+                    { day: "Lundi - Vendredi", hours: "10h - 18h" },
+                    { day: "Samedi", hours: "Sur rendez-vous" },
+                    { day: "Dimanche", hours: "Fermé" },
+                  ].map((schedule, index) => (
+                    <motion.div
+                      key={index}
+                      className="flex justify-between"
+                      variants={itemVariants}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <span>{schedule.day}</span>
+                      <span>{schedule.hours}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Contact Form */}
+            <motion.div
+              id="form"
+              className="bg-white bg-opacity-5 p-8 rounded-2xl backdrop-blur-sm border border-gray-600"
+              variants={itemVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.h2
+                className="text-2xl font-bold text-white mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                Envoyez-nous un message
+              </motion.h2>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <motion.div
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+                  variants={itemVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-white">
+                      Prénom <RequiredCp />
+                    </Label>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <Input
                         id="firstName"
                         name="firstName"
@@ -285,13 +305,18 @@ const Contact = () => {
                         onChange={handleChange}
                         placeholder="Votre prénom"
                         required
-                        className="bg-red-100"
+                        className="bg-white bg-opacity-5 border-gray-500 text-white placeholder-gray-400"
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">
-                        Nom <span className="text-red-500">*</span>
-                      </Label>
+                    </motion.div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName" className="text-white">
+                      Nom <RequiredCp />
+                    </Label>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <Input
                         id="lastName"
                         name="lastName"
@@ -299,16 +324,28 @@ const Contact = () => {
                         onChange={handleChange}
                         placeholder="Votre nom"
                         required
-                        className="bg-red-100"
+                        className="bg-white bg-opacity-5 border-gray-500 text-white placeholder-gray-400"
                       />
-                    </div>
+                    </motion.div>
                   </div>
+                </motion.div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">
-                        Email <span className="text-red-500">*</span>
-                      </Label>
+                <motion.div
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+                  variants={itemVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-white">
+                      Email <RequiredCp />
+                    </Label>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <Input
                         id="email"
                         name="email"
@@ -317,101 +354,162 @@ const Contact = () => {
                         onChange={handleChange}
                         placeholder="votre@email.com"
                         required
-                        className="bg-red-100"
+                        className="bg-white bg-opacity-5 border-gray-500 text-white placeholder-gray-400"
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phoneNumber">Téléphone</Label>
+                    </motion.div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phoneNumber" className="text-white">
+                      Téléphone
+                    </Label>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <Input
                         id="phoneNumber"
                         name="phoneNumber"
                         type="tel"
                         value={formData.phoneNumber}
                         onChange={handleChange}
-                        placeholder="Votre numéro de téléphone"
-                        className="bg-red-100"
+                        placeholder="Votre numéro"
+                        className="bg-white bg-opacity-5 border-gray-500 text-white placeholder-gray-400"
                       />
-                    </div>
+                    </motion.div>
                   </div>
+                </motion.div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="company">Entreprise</Label>
+                <motion.div
+                  className="space-y-2"
+                  variants={itemVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <Label htmlFor="company" className="text-white">
+                    Entreprise
+                  </Label>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <Input
                       id="company"
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
-                      placeholder="Nom de votre entreprise (optionnel)"
-                      className="bg-red-100"
+                      placeholder="Nom de votre entreprise"
+                      className="bg-white bg-opacity-5 border-gray-500 text-white placeholder-gray-400"
                     />
-                  </div>
+                  </motion.div>
+                </motion.div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="serviceType">
-                      Type de service <span className="text-red-500">*</span>
-                    </Label>
+                <motion.div
+                  className="space-y-2"
+                  variants={itemVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <Label htmlFor="serviceType" className="text-white">
+                    Type de service <RequiredCp />
+                  </Label>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <Select
-                      className="bg-red-100"
-                      onValueChange={handleSelectChange}
                       value={formData.serviceType}
+                      onValueChange={handleSelectChange}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white bg-opacity-5 border-gray-500 text-white">
                         <SelectValue placeholder="Sélectionnez un service" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="branding">Branding</SelectItem>
-                        <SelectItem value="web">
-                          Création de site web
-                        </SelectItem>
+                        <SelectItem value="web">Création de site web</SelectItem>
                         <SelectItem value="ia">Stratégie IA</SelectItem>
                         <SelectItem value="auto">Automatisation</SelectItem>
                         <SelectItem value="other">Autre</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
+                  </motion.div>
+                </motion.div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="message">
-                      Message <span className="text-red-500">*</span>
-                    </Label>
+                <motion.div
+                  className="space-y-2"
+                  variants={itemVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <Label htmlFor="message" className="text-white">
+                    Message <RequiredCp />
+                  </Label>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <Textarea
                       id="message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Décrivez votre projet ou votre demande"
+                      placeholder="Décrivez votre projet"
                       rows={6}
                       required
-                      className="bg-red-100"
+                      className="bg-white bg-opacity-5 border-gray-500 text-white placeholder-gray-400"
                     />
-                  </div>
+                  </motion.div>
+                </motion.div>
 
-                  <div className="flex items-start space-x-2">
-                    <Checkbox
-                      id="gdprConsent"
-                      checked={formData.gdprConsent}
-                      onCheckedChange={handleCheckboxChange}
-                    />
-                    <Label htmlFor="gdprConsent" className="text-sm text-white">
-                      J'accepte que mes données soient traitées pour me
-                      recontacter concernant ma demande. Pour en savoir plus sur
-                      la gestion de vos données et vos droits, consultez notre
-                      politique de confidentialité.
-                    </Label>
-                  </div>
+                <motion.div
+                  className="flex items-start space-x-3"
+                  variants={itemVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <Checkbox
+                    id="gdprConsent"
+                    checked={formData.gdprConsent}
+                    onCheckedChange={handleCheckboxChange}
+                    className="mt-1"
+                  />
+                  <Label
+                    htmlFor="gdprConsent"
+                    className="text-sm text-gray-300 leading-relaxed"
+                  >
+                    J'accepte que mes données soient traitées pour me recontacter
+                    concernant ma demande. Pour en savoir plus sur la gestion de
+                    vos données et vos droits, consultez notre politique de
+                    confidentialité.
+                  </Label>
+                </motion.div>
 
+                <motion.div
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
                   <Button
                     type="submit"
-                    className="btn-primary w-full"
+                    className="w-full bg-theme-red hover:bg-theme-brightRed text-white"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
-                      <div className="flex items-center">
-                        <svg
+                      <div className="flex items-center justify-center">
+                        <motion.svg
                           className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
+                          animate={{ rotate: 360 }}
+                          transition={{ repeat: Infinity, duration: 1 }}
                         >
                           <circle
                             className="opacity-25"
@@ -426,95 +524,71 @@ const Contact = () => {
                             fill="currentColor"
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
-                        </svg>
+                        </motion.svg>
                         Envoi en cours...
                       </div>
                     ) : (
-                      <div className="flex items-center">
-                        <Send className="mr-2 h-5 w-5" />
-                        Envoyer ma demande
+                      <div className="flex items-center justify-center">
+                        <motion.div
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{ repeat: Infinity, duration: 1.5 }}
+                        >
+                          <Send className="mr-2 h-5 w-5" />
+                        </motion.div>
+                        Envoyer le message
                       </div>
                     )}
                   </Button>
-                </form>
-              </div>
-            </div>
+                </motion.div>
+              </form>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Map Section */}
-      <section className="section-padding bg-red-400 py-0">
-        <div className="overflow-hidden rounded-lg border">
-          <iframe
-            title="Carte Google Maps"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.2712013001124!2d-8.030016025224263!3d31.640861541180602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef96ad478ef9%3A0x9a4265bf810cd3da!2sCOMMUNIK!5e1!3m2!1sen!2sma!4v1746218886829!5m2!1sen!2sma"
-            width="100%"
-            height="400"
-            style={{ border: 0, borderColor: "transparent" }}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="section-padding bg-gradient-to-r from-communikAI-gray to-communikAI-red">
+      <motion.section
+        className="py-20"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-12 text-center">
-              Questions fréquentes
-            </h2>
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Quel est le délai moyen pour un projet ?
-                </h3>
-                <p className="text-white">
-                  La durée dépend de la complexité du projet. Un site vitrine
-                  simple peut prendre 2-3 semaines, tandis qu'un projet plus
-                  complexe nécessitera 2-3 mois. Nous établissons toujours un
-                  calendrier précis au démarrage.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Comment se déroule la collaboration ?
-                </h3>
-                <p className="text-white">
-                  Nous commençons par un appel ou une réunion pour comprendre
-                  vos besoins, puis nous établissons une proposition détaillée.
-                  Une fois validée, nous travaillons par étapes avec des points
-                  de validation réguliers.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Proposez-vous un support après la livraison du projet ?
-                </h3>
-                <p className="text-white">
-                  Oui, nous offrons un support technique après la livraison et
-                  proposons également des contrats de maintenance pour assurer
-                  le bon fonctionnement et l'évolution de votre projet.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Quel est le coût moyen d'un projet ?
-                </h3>
-                <p className="text-white">
-                  Les tarifs varient en fonction de la nature et de l'ampleur du
-                  projet. Nous établissons des devis personnalisés après avoir
-                  évalué précisément vos besoins. N'hésitez pas à nous contacter
-                  pour obtenir une estimation.
-                </p>
-              </div>
-            </div>
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              className="overflow-hidden rounded-2xl border border-gray-800"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+            >
+              <iframe
+                title="Carte Google Maps"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.2712013001124!2d-8.030016025224263!3d31.640861541180602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef96ad478ef9%3A0x9a4265bf810cd3da!2sCOMMUNIK!5e1!3m2!1sen!2sma!4v1746218886829!5m2!1sen!2sma"
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 };
 
 export default Contact;
+
+const RequiredCp = () => {
+  return (
+    <motion.span
+      className="text-theme-red"
+      animate={{ scale: [1, 1.2, 1] }}
+      transition={{ repeat: Infinity, duration: 2 }}
+    >
+      *
+    </motion.span>
+  );
+};
