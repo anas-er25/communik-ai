@@ -653,7 +653,7 @@ const AdminDashboard: React.FC = () => {
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-theme-gray/30">
+                    <TableRow className="border-theme-gray/30 hover:bg-theme-red/10">
                       <TableHead
                         className="text-gray-300 cursor-pointer"
                         onClick={() => handleSort("firstName")}
@@ -962,7 +962,6 @@ const AdminDashboard: React.FC = () => {
                               <Progress
                                 value={percentage}
                                 className="h-2 bg-theme-gray/30"
-                                indicatorClassName="bg-theme-red"
                               />
                             </motion.div>
                           );
@@ -991,7 +990,6 @@ const AdminDashboard: React.FC = () => {
                               <Progress
                                 value={percentage}
                                 className="h-2 bg-theme-gray/30"
-                                indicatorClassName="bg-theme-red"
                               />
                             </motion.div>
                           );

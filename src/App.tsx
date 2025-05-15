@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -32,12 +31,12 @@ const App = () => (
               <Route path="/" element={<Home />} />
               <Route path="/realisations" element={<Projects />} />
               <Route path="/contact" element={<Contact />} />
-              
+
               {/* Authentication routes */}
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/register" element={<Register />} />
               <Route path="/auth/password-reset" element={<PasswordReset />} />
-              
+
               {/* Protected routes - available to all authenticated users */}
               <Route path="/profile" element={
                 <PrivateRoute>
@@ -49,8 +48,10 @@ const App = () => (
                   <AdminDashboard />
                 </PrivateRoute>
               } />
-              
-              {/* Redirect any other routes to home */}
+
+              {/* Redirect /public/* to home */}
+              <Route path="/public/:path*" element={<Navigate to="/" replace />} />
+              {/* Catch-all for 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
