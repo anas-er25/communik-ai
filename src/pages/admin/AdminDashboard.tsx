@@ -2,52 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  LogOut,
-  Filter,
-  User,
-  Mail,
-  Building,
-  Calendar,
-  Send,
-  RefreshCw,
-  Search,
-  Plus,
-} from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LogOut } from "lucide-react";
 import { enrichLead } from "@/lib/lead-enrichment";
 import { scheduleFollowUp } from "@/lib/lead-automation";
 import { mockLeads } from "@/data/mock-leads";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import LeadFilters from "@/components/admin/LeadFilters";
+import LeadTable from "@/components/admin/LeadTable";
+import LeadPagination from "@/components/admin/LeadPagination";
 
 interface Lead {
   id: string;
@@ -561,319 +529,37 @@ const AdminDashboard: React.FC = () => {
               className="bg-white bg-opacity-5 rounded-2xl backdrop-blur-sm border border-theme-gray/30 p-6 mb-6"
               variants={itemVariants}
             >
-              <div className="flex flex-col md:flex-row md:items-end gap-4 mb-6">
-                <motion.div className="flex-grow" variants={itemVariants}>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Recherche
-                  </label>
-                  <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-                    <Input
-                      type="text"
-                      placeholder="Rechercher par nom, email, entreprise..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-9 bg-theme-charcoal border-theme-gray/30 text-gray-300 placeholder-gray-400"
-                    />
-                  </div>
-                </motion.div>
+              <motion.div variants={itemVariants}>
+                <LeadFilters
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                  statusFilter={statusFilter}
+                  setStatusFilter={setStatusFilter}
+                  serviceFilter={serviceFilter}
+                  setServiceFilter={setServiceFilter}
+                  dateFilter={dateFilter}
+                  setDateFilter={setDateFilter}
+                  scoreFilter={scoreFilter}
+                  setScoreFilter={setScoreFilter}
+                />
+              </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                  {[
-                    {
-                      label: "Statut",
-                      value: statusFilter,
-                      onChange: setStatusFilter,
-                      options: [
-                        { value: "all", label: "Tous les statuts" },
-                        { value: "new", label: "Nouveaux" },
-                        { value: "contacted", label: "Contactés" },
-                        { value: "qualified", label: "Qualifiés" },
-                        { value: "converted", label: "Convertis" },
-                        { value: "lost", label: "Perdus" },
-                      ],
-                    },
-                    {
-                      label: "Service",
-                      value: serviceFilter,
-                      onChange: setServiceFilter,
-                      options: [
-                        { value: "all", label: "Tous les services" },
-                        { value: "branding", label: "Branding" },
-                        { value: "web", label: "Site web" },
-                        { value: "ia", label: "Stratégie IA" },
-                        { value: "auto", label: "Automatisation" },
-                        { value: "other", label: "Autre" },
-                      ],
-                    },
-                    {
-                      label: "Date",
-                      value: dateFilter,
-                      onChange: setDateFilter,
-                      options: [
-                        { value: "all", label: "Toutes les dates" },
-                        { value: "today", label: "Aujourd'hui" },
-                        { value: "week", label: "Cette semaine" },
-                        { value: "month", label: "Ce mois" },
-                      ],
-                    },
-                    {
-                      label: "Score",
-                      value: scoreFilter,
-                      onChange: setScoreFilter,
-                      options: [
-                        { value: "all", label: "Tous les scores" },
-                        { value: "high", label: "Élevé (70+)" },
-                        { value: "medium", label: "Moyen (40-69)" },
-                        { value: "low", label: "Faible (0-39)" },
-                      ],
-                    },
-                  ].map((filter, index) => (
-                    <motion.div key={filter.label} variants={itemVariants} transition={{ delay: index * 0.1 }}>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">
-                        {filter.label}
-                      </label>
-                      <Select value={filter.value} onValueChange={filter.onChange}>
-                        <SelectTrigger className="bg-theme-charcoal border-theme-gray/30 text-gray-300">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-theme-charcoal border-theme-gray/30 text-gray-300">
-                          {filter.options.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-theme-gray/30 hover:bg-theme-red/10">
-                      <TableHead
-                        className="text-gray-300 cursor-pointer"
-                        onClick={() => handleSort("firstName")}
-                      >
-                        Contact
-                        {sortKey === "firstName" && (
-                          <span>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
-                        )}
-                      </TableHead>
-                      <TableHead className="text-gray-300">
-                        Service
-                      </TableHead>
-                      <TableHead
-                        className="text-gray-300 cursor-pointer"
-                        onClick={() => handleSort("createdAt")}
-                      >
-                        Date
-                        {sortKey === "createdAt" && (
-                          <span>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
-                        )}
-                      </TableHead>
-                      <TableHead
-                        className="text-gray-300 cursor-pointer"
-                        onClick={() => handleSort("status")}
-                      >
-                        Statut
-                        {sortKey === "status" && (
-                          <span>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
-                        )}
-                      </TableHead>
-                      <TableHead
-                        className="text-gray-300 cursor-pointer"
-                        onClick={() => handleSort("score")}
-                      >
-                        Score
-                        {sortKey === "score" && (
-                          <span>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
-                        )}
-                      </TableHead>
-                      <TableHead className="text-gray-300">
-                        Enrichi
-                      </TableHead>
-                      <TableHead className="text-gray-300">
-                        Suivi
-                      </TableHead>
-                      <TableHead className="text-right text-gray-300">
-                        Actions
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredLeads.length > 0 ? (
-                      paginatedLeads.map((lead, index) => (
-                        <motion.tr
-                          key={lead.id}
-                          variants={itemVariants}
-                          initial="hidden"
-                          animate="visible"
-                          transition={{ delay: index * 0.1 }}
-                          className="border-theme-gray/30"
-                        >
-                          <TableCell>
-                            <div className="font-medium text-white">
-                              {lead.firstName} {lead.lastName}
-                            </div>
-                            <div className="text-sm text-gray-400">
-                              {lead.email}
-                            </div>
-                            {lead.company && (
-                              <div className="text-sm text-gray-400">
-                                {lead.company}
-                              </div>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-gray-300">
-                            {lead.serviceType}
-                          </TableCell>
-                          <TableCell className="text-gray-300">
-                            {new Date(lead.createdAt).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell>{getStatusBadge(lead.status)}</TableCell>
-                          <TableCell>{getScoreDisplay(lead.score)}</TableCell>
-                          <TableCell>
-                            {lead.enriched ? (
-                              <Badge
-                                variant="outline"
-                                className="bg-theme-charcoal text-green-400 border-green-400"
-                              >
-                                Enrichi
-                              </Badge>
-                            ) : (
-                              <Badge
-                                variant="outline"
-                                className="bg-theme-charcoal text-gray-400 border-gray-400"
-                              >
-                                Non
-                              </Badge>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-gray-300">
-                            {lead.nextFollowUp ? (
-                              <span>
-                                {new Date(lead.nextFollowUp).toLocaleDateString()}
-                              </span>
-                            ) : (
-                              <span className="text-gray-500">
-                                Non planifié
-                              </span>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end space-x-2">
-                              <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleEnrichLead(lead.id)}
-                                  disabled={lead.enriched}
-                                  className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
-                                >
-                                  <Plus className="h-4 w-4" />
-                                </Button>
-                              </motion.div>
-                              <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleScheduleFollowUp(lead.id)}
-                                  className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
-                                >
-                                  <Calendar className="h-4 w-4" />
-                                </Button>
-                              </motion.div>
-                              <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleMarkAsContacted(lead.id)}
-                                  disabled={lead.status !== "new"}
-                                  className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
-                                >
-                                  <Send className="h-4 w-4" />
-                                </Button>
-                              </motion.div>
-                              <Select
-                                onValueChange={(value) =>
-                                  handleUpdateStatus(
-                                    lead.id,
-                                    value as Lead["status"]
-                                  )
-                                }
-                              >
-                                <SelectTrigger className="h-8 w-[140px] bg-theme-charcoal border-theme-gray/30 text-gray-300">
-                                  <SelectValue placeholder="Changer statut" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-theme-charcoal border-theme-gray/30 text-gray-300">
-                                  <SelectItem value="new">Nouveau</SelectItem>
-                                  <SelectItem value="contacted">
-                                    Contacté
-                                  </SelectItem>
-                                  <SelectItem value="qualified">
-                                    Qualifié
-                                  </SelectItem>
-                                  <SelectItem value="converted">
-                                    Converti
-                                  </SelectItem>
-                                  <SelectItem value="lost">Perdu</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </TableCell>
-                        </motion.tr>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell
-                          colSpan={9}
-                          className="text-center py-8 text-gray-400"
-                        >
-                          Aucun lead ne correspond à vos critères de recherche
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-
-              <motion.div
-                className="flex justify-between items-center mt-4"
-                variants={itemVariants}
-              >
-                <span className="text-sm text-gray-400">
-                  Page {currentPage} sur {totalPages}
-                </span>
-                <div className="space-x-2">
-                  <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={currentPage === 1}
-                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                      className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
-                    >
-                      Précédent
-                    </Button>
-                  </motion.div>
-                  <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={currentPage === totalPages}
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                      }
-                      className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
-                    >
-                      Suivant
-                    </Button>
-                  </motion.div>
-                </div>
+              <motion.div variants={itemVariants}>
+                <LeadTable
+                  leads={paginatedLeads}
+                  onEnrichLead={handleEnrichLead}
+                  onScheduleFollowUp={handleScheduleFollowUp}
+                  onMarkAsContacted={handleMarkAsContacted}
+                  onUpdateStatus={handleUpdateStatus}
+                  onSort={handleSort}
+                  sortKey={sortKey}
+                  sortOrder={sortOrder}
+                />
+                <LeadPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
               </motion.div>
             </motion.div>
           </TabsContent>
