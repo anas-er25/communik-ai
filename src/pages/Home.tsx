@@ -131,13 +131,10 @@ const Home = () => {
       {/* Power Section */}
       <section
         className="bg-theme-black py-24"
-       
       >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div
-             
-            >
+            <div>
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
                 L'infrastructure pour développer{" "}
                 <span className="text-theme-red">l'économie numérique</span>
@@ -155,35 +152,15 @@ const Home = () => {
               </div>
             </div>
 
-            <div
-              className="relative"
-            
-            >
-              <div className="bg-gradient-to-tr from-theme-red to-theme-black p-6 rounded-lg">
-                <AspectRatio ratio={4 / 3}>
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className="text-white">
-                      <div
-                       
-                      >
-                        <ArrowUpRight className="w-12 h-12 text-white mb-4" />
-                      </div>
-                      <div
-                        className="h-16 bg-gradient-to-r from-theme-red to-theme-brightRed w-3/4 mb-2 rounded"
-                        
-                      ></div>
-                      <div
-                        className="h-16 bg-gradient-to-r from-theme-red to-theme-brightRed w-full mb-2 rounded"
-                        
-                      ></div>
-                      <div
-                        className="h-16 bg-gradient-to-r from-theme-red to-theme-brightRed w-11/12 rounded"
-                       
-                      ></div>
-                    </div>
-                  </div>
-                </AspectRatio>
-              </div>
+            <div className="relative h-[400px]">
+              <iframe 
+                src='https://my.spline.design/worldplanet-FhWJwimcYPs1v7SNInFhsCQN/' 
+                frameBorder='0' 
+                width='100%' 
+                height='100%'
+                title="3D World Planet"
+                className="rounded-lg shadow-lg"
+              ></iframe>
             </div>
           </div>
         </div>
@@ -292,7 +269,6 @@ const Home = () => {
       {/* CTA Section */}
       <section
         className="bg-theme-red py-24"
-       
       >
         <div className="container mx-auto px-4 text-center">
           <h2
