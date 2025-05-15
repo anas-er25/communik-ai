@@ -151,16 +151,17 @@ const Home = () => {
                 </p>
               </div>
             </div>
-
-            <div className="relative h-[400px]">
-              <iframe 
-                src='https://my.spline.design/worldplanet-FhWJwimcYPs1v7SNInFhsCQN/' 
-                frameBorder='0' 
-                width='100%' 
-                height='100%'
-                title="3D World Planet"
-                className="rounded-lg shadow-lg"
-              ></iframe>
+            <div
+              className="relative"
+            
+            >
+              <div className="bg-gradient-to-tr from-theme-red to-theme-black p-6 rounded-lg">
+                <AspectRatio ratio={4 / 3}>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <iframe src='https://my.spline.design/worldplanet-FhWJwimcYPs1v7SNInFhsCQN/' width='100%' height='100%'></iframe>
+                  </div>
+                </AspectRatio>
+              </div>
             </div>
           </div>
         </div>

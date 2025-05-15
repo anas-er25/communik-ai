@@ -195,7 +195,7 @@ const Contact = () => {
                   {
                     icon: <MapPin className="h-6 w-6 text-theme-red" />,
                     title: "Notre bureau",
-                    content: "123 Rue de l'Innovation, 75000 Paris",
+                    content: "320 rue saint honoré 75001 Paris",
                   },
                   {
                     icon: <Mail className="h-6 w-6 text-theme-red" />,
@@ -205,7 +205,7 @@ const Contact = () => {
                   {
                     icon: <Phone className="h-6 w-6 text-theme-red" />,
                     title: "Téléphone",
-                    content: "+33 1 23 45 67 89",
+                    content: "+212 696486911",
                   },
                 ].map((item, index) => (
                   <motion.div

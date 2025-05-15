@@ -11,6 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import logo from '../../public/logo.png';
+
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,7 +43,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <span className="text-xl font-heading font-bold text-white">
-            Communik<span className="text-theme-red">AI</span>
+            <img src={logo} alt="logo" width={200} />
           </span>
         </Link>
 

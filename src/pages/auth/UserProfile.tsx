@@ -43,12 +43,12 @@ const UserProfile = () => {
 
   if (!currentUser) {
     return (
-      <div className="container flex items-center justify-center min-h-[80vh] bg-red-200">
-        <Card className="w-full max-w-md">
+      <div className="min-h-[80vh] bg-gradient-to-b from-theme-black via-theme-darkRed to-theme-black flex items-center justify-center">
+        <Card className="w-full max-w-md bg-white bg-opacity-5 border-theme-gray/30 backdrop-blur-sm">
           <CardContent className="pt-6">
             <div className="text-center">
-              <p>Vous n'êtes pas connecté.</p>
-              <Button className="mt-4" asChild>
+              <p className="text-gray-300">Vous n'êtes pas connecté.</p>
+              <Button className="mt-4 bg-theme-red text-white hover:bg-theme-brightRed rounded-full">
                 <a href="/auth/login">Se connecter</a>
               </Button>
             </div>
@@ -59,11 +59,11 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="container flex items-center justify-center min-h-[80vh] bg-red-200">
-      <Card className="w-full max-w-md bg-red-100">
+    <div className="min-h-[80vh] bg-gradient-to-b from-theme-black via-theme-darkRed to-theme-black flex items-center justify-center">
+      <Card className="w-full max-w-md bg-white bg-opacity-5 border-theme-gray/30 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Votre profil</CardTitle>
-          <CardDescription>Gérer vos informations personnelles</CardDescription>
+          <CardTitle className="text-2xl font-bold text-white">Votre profil</CardTitle>
+          <CardDescription className="text-gray-400">Gérer vos informations personnelles</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex justify-center">
@@ -71,34 +71,35 @@ const UserProfile = () => {
               <img
                 src={currentUser.photoURL}
                 alt="Profile"
-                className="h-24 w-24 rounded-full object-cover border-2 border-gray-200"
+                className="h-24 w-24 rounded-full object-cover border-2 border-theme-red"
               />
             ) : (
-              <div className="h-24 w-24 rounded-full bg-gray-100 flex items-center justify-center">
+              <div className="h-24 w-24 rounded-full bg-theme-charcoal flex items-center justify-center">
                 <User className="h-12 w-12 text-gray-400" />
               </div>
             )}
           </div>
 
           <div className="space-y-1">
-            <Label className="text-sm text-muted-foreground">Email</Label>
-            <p className="font-medium">{currentUser.email}</p>
+            <Label className="text-sm text-gray-400">Email</Label>
+            <p className="font-medium text-gray-300">{currentUser.email}</p>
           </div>
 
           <form onSubmit={handleUpdateProfile} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="displayName">Nom d'affichage</Label>
+              <Label htmlFor="displayName" className="text-gray-300">Nom d'affichage</Label>
               <Input
                 id="displayName"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Votre nom"
+                className="bg-theme-charcoal border-theme-gray/30 text-gray-300 placeholder-gray-400"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-green-500 hover:bg-green-600 focus:ring-green-500 focus:ring-offset-green-200"
+              className="w-full bg-theme-red text-white hover:bg-theme-brightRed rounded-full"
               disabled={isUpdating}
             >
               {isUpdating ? (
@@ -133,8 +134,8 @@ const UserProfile = () => {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button
-            variant="destructive"
-            className="w-full bg-red-500 hover:bg-red-600 focus:ring-red-500 focus:ring-offset-red-200"
+            variant="outline"
+            className="w-full bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white rounded-full"
             onClick={handleLogout}
           >
             Se déconnecter
