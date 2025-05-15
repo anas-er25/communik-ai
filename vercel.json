@@ -1,4 +1,3 @@
-
 {
     "rewrites": [
         {
@@ -15,6 +14,12 @@
                     "value": "public, max-age=0, must-revalidate"
                 }
             ]
+        }
+    ],
+    "redirects": [
+        {
+            "source": "/public/:path*",
+            "destination": "/"
         }
     ]
 }

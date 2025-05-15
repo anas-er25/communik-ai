@@ -1,14 +1,36 @@
+# robots.txt for CommunikAI website
+# Allows major crawlers to access main content while protecting sensitive areas
+
+# Allow major search engine crawlers
 User-agent: Googlebot
 Allow: /
+Disallow: /auth/*
+Disallow: /admin/*
+Crawl-delay: 1
+Sitemap: https://communik-ai.vercel.app/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /auth/*
+Disallow: /admin/*
+Crawl-delay: 1
+Sitemap: https:https://communik-ai.vercel.app/
 
+# Allow social media crawlers for sharing previews
 User-agent: Twitterbot
 Allow: /
+Sitemap: https://communik-ai.vercel.app/
 
 User-agent: facebookexternalhit
 Allow: /
+Sitemap: https://communik-ai.vercel.app/
 
+# Other crawlers
 User-agent: *
 Allow: /
+Disallow: /auth/*
+Disallow: /admin/*
+Disallow: /profile/*
+Disallow: /public/*
+Crawl-delay: 5
+Sitemap: https://communik-ai.vercel.app/

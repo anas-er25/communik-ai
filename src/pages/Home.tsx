@@ -33,27 +33,27 @@ const Home = () => {
     {
       name: "Sophie Martin",
       role: "CEO & Fondatrice",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop",
+      image: "https://mighty.tools/mockmind-api/content/human/125.jpg",
     },
     {
       name: "Thomas Dubois",
       role: "Directeur Technique",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=150&auto=format&fit=crop",
+      image: "https://mighty.tools/mockmind-api/content/human/80.jpg",
     },
     {
       name: "Marie Lefèvre",
       role: "Directrice Créative",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop",
+      image: "https://mighty.tools/mockmind-api/content/human/108.jpg",
     },
     {
       name: "Alexandre Moreau",
       role: "Expert IA",
-      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=150&auto=format&fit=crop",
+      image: "https://mighty.tools/mockmind-api/content/human/91.jpg",
     },
     {
       name: "Julie Bernard",
       role: "Responsable Marketing",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=150&auto=format&fit=crop",
+      image: "https://mighty.tools/mockmind-api/content/human/124.jpg",
     },
   ];
 
