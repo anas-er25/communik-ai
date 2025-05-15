@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -46,6 +46,7 @@ import { Progress } from "@/components/ui/progress";
 import { enrichLead } from "@/lib/lead-enrichment";
 import { scheduleFollowUp } from "@/lib/lead-automation";
 import { mockLeads } from "@/data/mock-leads";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 interface Lead {
@@ -92,13 +93,25 @@ const AdminDashboard: React.FC = () => {
   const [dateFilter, setDateFilter] = useState("all");
   const [scoreFilter, setScoreFilter] = useState("all");
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const paginatedLeads = filteredLeads.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const totalPages = Math.ceil(filteredLeads.length / itemsPerPage);
+
+  // Sorting states
+  const [sortKey, setSortKey] = useState<keyof Lead | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   // Load leads when component mounts
   useEffect(() => {
     const fetchLeads = async () => {
       try {
         const response = await axios.get(
-          `https://sheets.googleapis.com/v4/spreadsheets/${
-            import.meta.env.VITE_SHEET_SHARE
+          `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_SHEET_SHARE
           }/values/Sheet1?key=${import.meta.env.VITE_GOOGLE_API_KEY}`
         );
 
@@ -215,6 +228,22 @@ const AdminDashboard: React.FC = () => {
         }
       }
 
+      // Apply sorting
+      if (sortKey) {
+        filtered = filtered.sort((a, b) => {
+          const aValue = a[sortKey];
+          const bValue = b[sortKey];
+
+          if (typeof aValue === "number" && typeof bValue === "number") {
+            return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+          }
+
+          return sortOrder === "asc"
+            ? String(aValue).localeCompare(String(bValue))
+            : String(bValue).localeCompare(String(aValue));
+        });
+      }
+
       setFilteredLeads(filtered);
     }
   }, [
@@ -225,6 +254,8 @@ const AdminDashboard: React.FC = () => {
     scoreFilter,
     leads,
     isLoading,
+    sortKey,
+    sortOrder,
   ]);
 
   // Enrich a lead with additional data
@@ -238,13 +269,11 @@ const AdminDashboard: React.FC = () => {
         description: "Recherche d'informations complémentaires...",
       });
 
-      // In a real app, this would call an API like Clearbit
       const enrichedData = await enrichLead(
         leads[leadIndex].email,
         leads[leadIndex].company
       );
 
-      // Update the lead with enriched data
       const updatedLeads = [...leads];
       updatedLeads[leadIndex] = {
         ...updatedLeads[leadIndex],
@@ -279,11 +308,8 @@ const AdminDashboard: React.FC = () => {
       });
 
       const lead = leads[leadIndex];
-
-      // In a real app, this would set up an automation workflow
       const nextFollowUp = await scheduleFollowUp(lead);
 
-      // Update the lead with follow-up data
       const updatedLeads = [...leads];
       updatedLeads[leadIndex] = {
         ...updatedLeads[leadIndex],
@@ -346,6 +372,12 @@ const AdminDashboard: React.FC = () => {
     });
   };
 
+  // Handle column sorting
+  const handleSort = (key: keyof Lead) => {
+    setSortKey(key);
+    setSortOrder(sortKey === key && sortOrder === "asc" ? "desc" : "asc");
+  };
+
   // Get status badge color based on lead status
   const getStatusBadge = (status: Lead["status"]) => {
     switch (status) {
@@ -353,7 +385,7 @@ const AdminDashboard: React.FC = () => {
         return (
           <Badge
             variant="outline"
-            className="bg-blue-100 text-blue-600 hover:bg-blue-100"
+            className="bg-theme-charcoal text-theme-red border-theme-red"
           >
             Nouveau
           </Badge>
@@ -362,7 +394,7 @@ const AdminDashboard: React.FC = () => {
         return (
           <Badge
             variant="outline"
-            className="bg-yellow-100 text-yellow-600 hover:bg-yellow-100"
+            className="bg-theme-charcoal text-yellow-400 border-yellow-400"
           >
             Contacté
           </Badge>
@@ -371,7 +403,7 @@ const AdminDashboard: React.FC = () => {
         return (
           <Badge
             variant="outline"
-            className="bg-red-100 text-red-600 hover:bg-red-100"
+            className="bg-theme-charcoal text-blue-400 border-blue-400"
           >
             Qualifié
           </Badge>
@@ -380,7 +412,7 @@ const AdminDashboard: React.FC = () => {
         return (
           <Badge
             variant="outline"
-            className="bg-green-100 text-green-600 hover:bg-green-100"
+            className="bg-theme-charcoal text-green-400 border-green-400"
           >
             Converti
           </Badge>
@@ -389,7 +421,7 @@ const AdminDashboard: React.FC = () => {
         return (
           <Badge
             variant="outline"
-            className="bg-gray-100 text-gray-600 hover:bg-gray-100"
+            className="bg-theme-charcoal text-gray-400 border-gray-400"
           >
             Perdu
           </Badge>
@@ -413,45 +445,43 @@ const AdminDashboard: React.FC = () => {
     return (
       <div className="flex items-center">
         <Progress value={score} className={`h-2 w-16 mr-2 ${color}`} />
-        <span>{score}</span>
+        <span className="text-gray-300">{score}</span>
       </div>
     );
   };
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
 
-  const paginatedLeads = filteredLeads.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // Animation variants
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
 
-  const totalPages = Math.ceil(filteredLeads.length / itemsPerPage);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  };
 
-  const [sortKey, setSortKey] = useState<keyof Lead | null>(null);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
-  const sortedLeads = [...filteredLeads].sort((a, b) => {
-    if (!sortKey) return 0;
-
-    const aValue = a[sortKey];
-    const bValue = b[sortKey];
-
-    if (typeof aValue === "number" && typeof bValue === "number") {
-      return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
-    }
-
-    return sortOrder === "asc"
-      ? String(aValue).localeCompare(String(bValue))
-      : String(bValue).localeCompare(String(aValue));
-  });
+  const buttonVariants = {
+    hover: { scale: 1.1, transition: { duration: 0.3 } },
+    tap: { scale: 0.95 },
+  };
 
   if (isLoading) {
     return (
-      <div className="container flex items-center justify-center min-h-[60vh] bg-red-200">
-        <div className="text-center">
-          <div className="flex items-center justify-center mb-4">
+      <div className="min-h-screen bg-gradient-to-b from-theme-black via-theme-darkRed to-theme-black flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1 }}
+            className="flex items-center justify-center mb-4"
+          >
             <svg
-              className="animate-spin h-8 w-8 text-communikAI-red"
+              className="h-8 w-8 text-theme-red"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -470,396 +500,512 @@ const AdminDashboard: React.FC = () => {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-          </div>
-          <p className="text-lg">Chargement du tableau de bord...</p>
-        </div>
+          </motion.div>
+          <p className="text-lg text-gray-300">Chargement du tableau de bord...</p>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="container px-4 py-8 bg-gradient-to-r from-communikAI-blue to-communikAI-red">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Tableau de Bord Admin</h1>
-          <p className="text-white">
-            Gérez vos leads et suivez leur progression
-          </p>
-        </div>
-        <Button variant="outline" onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Déconnexion
-        </Button>
-      </div>
+    <motion.div
+      className="min-h-screen bg-gradient-to-b from-theme-black via-theme-darkRed to-theme-black"
+      initial="hidden"
+      animate="visible"
+      variants={sectionVariants}
+    >
+      <div className="container mx-auto px-4 py-8">
+        <motion.div
+          className="flex justify-between items-center mb-8"
+          variants={itemVariants}
+        >
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+              Tableau de Bord Admin
+            </h1>
+            <p className="text-gray-300">
+              Gérez vos leads et suivez leur progression
+            </p>
+          </div>
+          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+            <Button
+              className="bg-theme-red hover:bg-theme-brightRed text-white rounded-full"
+              onClick={handleLogout}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Déconnexion
+            </Button>
+          </motion.div>
+        </motion.div>
 
-      <Tabs defaultValue="leads" className="mb-8">
-        <TabsList className="bg-red-200 mb-6">
-          <TabsTrigger value="leads">Leads</TabsTrigger>
-          <TabsTrigger value="analytics">Analytiques</TabsTrigger>
-        </TabsList>
+        <Tabs defaultValue="leads" className="mb-8">
+          <motion.div variants={itemVariants}>
+            <TabsList className="bg-theme-charcoal border-theme-gray/30 mb-6">
+              <TabsTrigger
+                value="leads"
+                className="data-[state=active]:bg-theme-red data-[state=active]:text-white"
+              >
+                Leads
+              </TabsTrigger>
+              <TabsTrigger
+                value="analytics"
+                className="data-[state=active]:bg-theme-red data-[state=active]:text-white"
+              >
+                Analytiques
+              </TabsTrigger>
+            </TabsList>
+          </motion.div>
 
-        <TabsContent value="leads">
-          <div className="bg-red-200 rounded-lg shadow-sm p-6 mb-6">
-            <div className="flex flex-col md:flex-row md:items-end gap-4 mb-6">
-              <div className="flex-grow">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Recherche
-                </label>
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder="Rechercher par nom, email, entreprise..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-9 bg-red-50"
-                  />
+          <TabsContent value="leads">
+            <motion.div
+              className="bg-white bg-opacity-5 rounded-2xl backdrop-blur-sm border border-theme-gray/30 p-6 mb-6"
+              variants={itemVariants}
+            >
+              <div className="flex flex-col md:flex-row md:items-end gap-4 mb-6">
+                <motion.div className="flex-grow" variants={itemVariants}>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Recherche
+                  </label>
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="Rechercher par nom, email, entreprise..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-9 bg-theme-charcoal border-theme-gray/30 text-gray-300 placeholder-gray-400"
+                    />
+                  </div>
+                </motion.div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    {
+                      label: "Statut",
+                      value: statusFilter,
+                      onChange: setStatusFilter,
+                      options: [
+                        { value: "all", label: "Tous les statuts" },
+                        { value: "new", label: "Nouveaux" },
+                        { value: "contacted", label: "Contactés" },
+                        { value: "qualified", label: "Qualifiés" },
+                        { value: "converted", label: "Convertis" },
+                        { value: "lost", label: "Perdus" },
+                      ],
+                    },
+                    {
+                      label: "Service",
+                      value: serviceFilter,
+                      onChange: setServiceFilter,
+                      options: [
+                        { value: "all", label: "Tous les services" },
+                        { value: "branding", label: "Branding" },
+                        { value: "web", label: "Site web" },
+                        { value: "ia", label: "Stratégie IA" },
+                        { value: "auto", label: "Automatisation" },
+                        { value: "other", label: "Autre" },
+                      ],
+                    },
+                    {
+                      label: "Date",
+                      value: dateFilter,
+                      onChange: setDateFilter,
+                      options: [
+                        { value: "all", label: "Toutes les dates" },
+                        { value: "today", label: "Aujourd'hui" },
+                        { value: "week", label: "Cette semaine" },
+                        { value: "month", label: "Ce mois" },
+                      ],
+                    },
+                    {
+                      label: "Score",
+                      value: scoreFilter,
+                      onChange: setScoreFilter,
+                      options: [
+                        { value: "all", label: "Tous les scores" },
+                        { value: "high", label: "Élevé (70+)" },
+                        { value: "medium", label: "Moyen (40-69)" },
+                        { value: "low", label: "Faible (0-39)" },
+                      ],
+                    },
+                  ].map((filter, index) => (
+                    <motion.div key={filter.label} variants={itemVariants} transition={{ delay: index * 0.1 }}>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">
+                        {filter.label}
+                      </label>
+                      <Select value={filter.value} onValueChange={filter.onChange}>
+                        <SelectTrigger className="bg-theme-charcoal border-theme-gray/30 text-gray-300">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-theme-charcoal border-theme-gray/30 text-gray-300">
+                          {filter.options.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Statut
-                  </label>
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Tous les statuts" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Tous les statuts</SelectItem>
-                      <SelectItem value="new">Nouveaux</SelectItem>
-                      <SelectItem value="contacted">Contactés</SelectItem>
-                      <SelectItem value="qualified">Qualifiés</SelectItem>
-                      <SelectItem value="converted">Convertis</SelectItem>
-                      <SelectItem value="lost">Perdus</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Service
-                  </label>
-                  <Select
-                    value={serviceFilter}
-                    onValueChange={setServiceFilter}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Tous les services" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Tous les services</SelectItem>
-                      <SelectItem value="branding">Branding</SelectItem>
-                      <SelectItem value="web">Site web</SelectItem>
-                      <SelectItem value="ia">Stratégie IA</SelectItem>
-                      <SelectItem value="auto">Automatisation</SelectItem>
-                      <SelectItem value="other">Autre</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Date
-                  </label>
-                  <Select value={dateFilter} onValueChange={setDateFilter}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Toutes les dates" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Toutes les dates</SelectItem>
-                      <SelectItem value="today">Aujourd'hui</SelectItem>
-                      <SelectItem value="week">Cette semaine</SelectItem>
-                      <SelectItem value="month">Ce mois</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Score
-                  </label>
-                  <Select value={scoreFilter} onValueChange={setScoreFilter}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Tous les scores" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Tous les scores</SelectItem>
-                      <SelectItem value="high">Élevé (70+)</SelectItem>
-                      <SelectItem value="medium">Moyen (40-69)</SelectItem>
-                      <SelectItem value="low">Faible (0-39)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Service</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Statut</TableHead>
-                    <TableHead>Score</TableHead>
-                    <TableHead>Enrichi</TableHead>
-                    <TableHead>Suivi</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredLeads.length > 0 ? (
-                    paginatedLeads.map((lead) => (
-                      <TableRow key={lead.id}>
-                        <TableCell>
-                          <div className="font-medium">
-                            {lead.firstName} {lead.lastName}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {lead.email}
-                          </div>
-                          {lead.company && (
-                            <div className="text-sm text-muted-foreground">
-                              {lead.company}
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-theme-gray/30">
+                      <TableHead
+                        className="text-gray-300 cursor-pointer"
+                        onClick={() => handleSort("firstName")}
+                      >
+                        Contact
+                        {sortKey === "firstName" && (
+                          <span>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
+                        )}
+                      </TableHead>
+                      <TableHead className="text-gray-300">
+                        Service
+                      </TableHead>
+                      <TableHead
+                        className="text-gray-300 cursor-pointer"
+                        onClick={() => handleSort("createdAt")}
+                      >
+                        Date
+                        {sortKey === "createdAt" && (
+                          <span>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
+                        )}
+                      </TableHead>
+                      <TableHead
+                        className="text-gray-300 cursor-pointer"
+                        onClick={() => handleSort("status")}
+                      >
+                        Statut
+                        {sortKey === "status" && (
+                          <span>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
+                        )}
+                      </TableHead>
+                      <TableHead
+                        className="text-gray-300 cursor-pointer"
+                        onClick={() => handleSort("score")}
+                      >
+                        Score
+                        {sortKey === "score" && (
+                          <span>{sortOrder === "asc" ? " ↑" : " ↓"}</span>
+                        )}
+                      </TableHead>
+                      <TableHead className="text-gray-300">
+                        Enrichi
+                      </TableHead>
+                      <TableHead className="text-gray-300">
+                        Suivi
+                      </TableHead>
+                      <TableHead className="text-right text-gray-300">
+                        Actions
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredLeads.length > 0 ? (
+                      paginatedLeads.map((lead, index) => (
+                        <motion.tr
+                          key={lead.id}
+                          variants={itemVariants}
+                          initial="hidden"
+                          animate="visible"
+                          transition={{ delay: index * 0.1 }}
+                          className="border-theme-gray/30"
+                        >
+                          <TableCell>
+                            <div className="font-medium text-white">
+                              {lead.firstName} {lead.lastName}
                             </div>
-                          )}
-                        </TableCell>
-                        <TableCell>{lead.serviceType}</TableCell>
-                        <TableCell>
-                          {new Date(lead.createdAt).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>{getStatusBadge(lead.status)}</TableCell>
-                        <TableCell>{getScoreDisplay(lead.score)}</TableCell>
-                        <TableCell>
-                          {lead.enriched ? (
-                            <Badge
-                              variant="outline"
-                              className="bg-green-100 text-green-600 hover:bg-green-100"
-                            >
-                              Enrichi
-                            </Badge>
-                          ) : (
-                            <Badge
-                              variant="outline"
-                              className="bg-gray-100 text-gray-600 hover:bg-gray-100"
-                            >
-                              Non
-                            </Badge>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {lead.nextFollowUp ? (
-                            <span className="text-sm">
-                              {new Date(lead.nextFollowUp).toLocaleDateString()}
-                            </span>
-                          ) : (
-                            <span className="text-sm text-gray-500">
-                              Non planifié
-                            </span>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end space-x-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEnrichLead(lead.id)}
-                              disabled={lead.enriched}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleScheduleFollowUp(lead.id)}
-                            >
-                              <Calendar className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleMarkAsContacted(lead.id)}
-                              disabled={lead.status !== "new"}
-                            >
-                              <Send className="h-4 w-4" />
-                            </Button>
-                            <Select
-                              onValueChange={(value) =>
-                                handleUpdateStatus(
-                                  lead.id,
-                                  value as Lead["status"]
-                                )
-                              }
-                            >
-                              <SelectTrigger className="h-8 w-[140px]">
-                                <SelectValue placeholder="Changer statut" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="new">Nouveau</SelectItem>
-                                <SelectItem value="contacted">
-                                  Contacté
-                                </SelectItem>
-                                <SelectItem value="qualified">
-                                  Qualifié
-                                </SelectItem>
-                                <SelectItem value="converted">
-                                  Converti
-                                </SelectItem>
-                                <SelectItem value="lost">Perdu</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                            <div className="text-sm text-gray-400">
+                              {lead.email}
+                            </div>
+                            {lead.company && (
+                              <div className="text-sm text-gray-400">
+                                {lead.company}
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-gray-300">
+                            {lead.serviceType}
+                          </TableCell>
+                          <TableCell className="text-gray-300">
+                            {new Date(lead.createdAt).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>{getStatusBadge(lead.status)}</TableCell>
+                          <TableCell>{getScoreDisplay(lead.score)}</TableCell>
+                          <TableCell>
+                            {lead.enriched ? (
+                              <Badge
+                                variant="outline"
+                                className="bg-theme-charcoal text-green-400 border-green-400"
+                              >
+                                Enrichi
+                              </Badge>
+                            ) : (
+                              <Badge
+                                variant="outline"
+                                className="bg-theme-charcoal text-gray-400 border-gray-400"
+                              >
+                                Non
+                              </Badge>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-gray-300">
+                            {lead.nextFollowUp ? (
+                              <span>
+                                {new Date(lead.nextFollowUp).toLocaleDateString()}
+                              </span>
+                            ) : (
+                              <span className="text-gray-500">
+                                Non planifié
+                              </span>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex justify-end space-x-2">
+                              <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEnrichLead(lead.id)}
+                                  disabled={lead.enriched}
+                                  className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </Button>
+                              </motion.div>
+                              <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleScheduleFollowUp(lead.id)}
+                                  className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
+                                >
+                                  <Calendar className="h-4 w-4" />
+                                </Button>
+                              </motion.div>
+                              <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleMarkAsContacted(lead.id)}
+                                  disabled={lead.status !== "new"}
+                                  className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
+                                >
+                                  <Send className="h-4 w-4" />
+                                </Button>
+                              </motion.div>
+                              <Select
+                                onValueChange={(value) =>
+                                  handleUpdateStatus(
+                                    lead.id,
+                                    value as Lead["status"]
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="h-8 w-[140px] bg-theme-charcoal border-theme-gray/30 text-gray-300">
+                                  <SelectValue placeholder="Changer statut" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-theme-charcoal border-theme-gray/30 text-gray-300">
+                                  <SelectItem value="new">Nouveau</SelectItem>
+                                  <SelectItem value="contacted">
+                                    Contacté
+                                  </SelectItem>
+                                  <SelectItem value="qualified">
+                                    Qualifié
+                                  </SelectItem>
+                                  <SelectItem value="converted">
+                                    Converti
+                                  </SelectItem>
+                                  <SelectItem value="lost">Perdu</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </TableCell>
+                        </motion.tr>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={9}
+                          className="text-center py-8 text-gray-400"
+                        >
+                          Aucun lead ne correspond à vos critères de recherche
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={9} className="text-center py-8">
-                        <div className="text-muted-foreground">
-                          Aucun lead ne correspond à vos critères de recherche
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </div>
-        </TabsContent>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
 
-        <TabsContent value="analytics">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Vue d'ensemble</CardTitle>
-                <CardDescription>
-                  Statistiques globales des leads
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Total des leads</span>
-                    <span className="font-bold">{leads.length}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Taux de conversion</span>
-                    <span className="font-bold">
-                      {Math.round(
+              <motion.div
+                className="flex justify-between items-center mt-4"
+                variants={itemVariants}
+              >
+                <span className="text-sm text-gray-400">
+                  Page {currentPage} sur {totalPages}
+                </span>
+                <div className="space-x-2">
+                  <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                      className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
+                    >
+                      Précédent
+                    </Button>
+                  </motion.div>
+                  <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={currentPage === totalPages}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      className="bg-theme-charcoal border-theme-gray/30 text-gray-300 hover:bg-theme-red hover:text-white"
+                    >
+                      Suivant
+                    </Button>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              variants={itemVariants}
+            >
+              {[
+                {
+                  title: "Vue d'ensemble",
+                  description: "Statistiques globales des leads",
+                  stats: [
+                    { label: "Total des leads", value: leads.length },
+                    {
+                      label: "Taux de conversion",
+                      value: `${Math.round(
                         (leads.filter((l) => l.status === "converted").length /
                           leads.length) *
-                          100
-                      )}
-                      %
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Score moyen</span>
-                    <span className="font-bold">
-                      {Math.round(
+                        100
+                      )}%`,
+                    },
+                    {
+                      label: "Score moyen",
+                      value: Math.round(
                         leads.reduce((acc, l) => acc + l.score, 0) /
-                          leads.length
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Distribution par service</CardTitle>
-                <CardDescription>Répartition des demandes</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {["branding", "web", "ia", "auto", "other"].map((service) => {
-                    const count = leads.filter(
-                      (l) => l.serviceType === service
-                    ).length;
-                    const percentage = Math.round((count / leads.length) * 100);
-
-                    return (
-                      <div key={service} className="space-y-1">
-                        <div className="flex justify-between items-center text-sm">
-                          <span>
-                            {service.charAt(0).toUpperCase() + service.slice(1)}
-                          </span>
-                          <span>{percentage}%</span>
-                        </div>
-                        <Progress value={percentage} className="h-2" />
+                        leads.length
+                      ),
+                    },
+                  ],
+                },
+                {
+                  title: "Distribution par service",
+                  description: "Répartition des demandes",
+                  services: ["branding", "web", "ia", "auto", "other"],
+                },
+                {
+                  title: "Statuts des leads",
+                  description: "Progression dans le funnel",
+                  statuses: ["new", "contacted", "qualified", "converted", "lost"],
+                },
+              ].map((card, index) => (
+                <motion.div
+                  key={card.title}
+                  variants={itemVariants}
+                  transition={{ delay: index * 0.2 }}
+                >
+                  <Card className="bg-white bg-opacity-5 border-theme-gray/30 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="text-white">{card.title}</CardTitle>
+                      <CardDescription className="text-gray-400">
+                        {card.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {card.stats && card.stats.map((stat, i) => (
+                          <motion.div
+                            key={i}
+                            className="flex justify-between items-center"
+                            variants={itemVariants}
+                            transition={{ delay: i * 0.1 }}
+                          >
+                            <span className="text-sm text-gray-300">{stat.label}</span>
+                            <span className="font-bold text-white">{stat.value}</span>
+                          </motion.div>
+                        ))}
+                        {card.services && card.services.map((service) => {
+                          const count = leads.filter(
+                            (l) => l.serviceType === service
+                          ).length;
+                          const percentage = Math.round((count / leads.length) * 100);
+                          return (
+                            <motion.div
+                              key={service}
+                              className="space-y-1"
+                              variants={itemVariants}
+                            >
+                              <div className="flex justify-between items-center text-sm text-gray-300">
+                                <span>
+                                  {service.charAt(0).toUpperCase() + service.slice(1)}
+                                </span>
+                                <span>{percentage}%</span>
+                              </div>
+                              <Progress
+                                value={percentage}
+                                className="h-2 bg-theme-gray/30"
+                                indicatorClassName="bg-theme-red"
+                              />
+                            </motion.div>
+                          );
+                        })}
+                        {card.statuses && card.statuses.map((status) => {
+                          const count = leads.filter(
+                            (l) => l.status === status
+                          ).length;
+                          const percentage = Math.round(
+                            (count / leads.length) * 100
+                          );
+                          return (
+                            <motion.div
+                              key={status}
+                              className="space-y-1"
+                              variants={itemVariants}
+                            >
+                              <div className="flex justify-between items-center text-sm text-gray-300">
+                                <span>
+                                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                                </span>
+                                <span>
+                                  {count} ({percentage}%)
+                                </span>
+                              </div>
+                              <Progress
+                                value={percentage}
+                                className="h-2 bg-theme-gray/30"
+                                indicatorClassName="bg-theme-red"
+                              />
+                            </motion.div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Statuts des leads</CardTitle>
-                <CardDescription>Progression dans le funnel</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {["new", "contacted", "qualified", "converted", "lost"].map(
-                    (status) => {
-                      const count = leads.filter(
-                        (l) => l.status === status
-                      ).length;
-                      const percentage = Math.round(
-                        (count / leads.length) * 100
-                      );
-
-                      return (
-                        <div key={status} className="space-y-1">
-                          <div className="flex justify-between items-center text-sm">
-                            <span>
-                              {status.charAt(0).toUpperCase() + status.slice(1)}
-                            </span>
-                            <span>
-                              {count} ({percentage}%)
-                            </span>
-                          </div>
-                          <Progress value={percentage} className="h-2" />
-                        </div>
-                      );
-                    }
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
-      <div className="flex justify-between items-center mt-4">
-        <span className="text-sm text-muted-foreground">
-          Page {currentPage} sur {totalPages}
-        </span>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          >
-            Précédent
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-          >
-            Suivant
-          </Button>
-        </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+          </TabsContent>
+        </Tabs>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

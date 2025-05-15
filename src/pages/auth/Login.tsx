@@ -15,7 +15,7 @@ const Login = () => {
   const { signIn, signInWithGoogle, signInWithGithub } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Get the redirect path from location state or default to "/admin"
   const from = location.state?.from || "/admin";
 
@@ -58,35 +58,37 @@ const Login = () => {
   };
 
   return (
-    <div className="container flex items-center justify-center min-h-[80vh] bg-red-200 p-4">
-      <Card className="w-full max-w-md bg-red-100">
+    <div className="min-h-screen bg-gradient-to-r from-theme-black to-theme-charcoal flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-theme-black border border-theme-gray/20">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Connexion</CardTitle>
-          <CardDescription>Accédez à votre compte CommunikAI</CardDescription>
+          <CardTitle className="text-2xl font-bold text-white">Connexion</CardTitle>
+          <CardDescription className="text-gray-400">
+            Accédez à votre compte CommunikAI
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-gray-200">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+                <Mail className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="votre@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-9 bg-red-50"
+                  className="pl-9 bg-theme-charcoal border-theme-gray/20 text-white placeholder:text-gray-500"
                   required
                 />
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <Label htmlFor="password">Mot de passe</Label>
+                <Label htmlFor="password" className="text-gray-200">Mot de passe</Label>
                 <Link
                   to="/auth/password-reset"
-                  className="text-sm text-blue-600 hover:underline"
+                  className="text-sm text-theme-red hover:text-theme-brightRed"
                 >
                   Mot de passe oublié?
                 </Link>
@@ -98,13 +100,13 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="bg-red-50"
+                className="bg-theme-charcoal border-theme-gray/20 text-white placeholder:text-gray-500"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-red-500 hover:bg-red-600 focus:ring-red-500 focus:ring-offset-red-200"
+              className="w-full bg-theme-red hover:bg-theme-brightRed text-white"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -138,10 +140,10 @@ const Login = () => {
 
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full bg-gray-300" />
+                <Separator className="w-full bg-theme-gray/20" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-red-100 px-2 text-muted-foreground">
+                <span className="bg-theme-black px-2 text-gray-400">
                   Ou continuer avec
                 </span>
               </div>
@@ -153,6 +155,7 @@ const Login = () => {
                 variant="outline"
                 onClick={handleGoogleSignIn}
                 disabled={isLoading}
+                className="border-theme-gray/20 text-theme-red hover:bg-theme-charcoal"
               >
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
@@ -179,6 +182,7 @@ const Login = () => {
                 variant="outline"
                 onClick={handleGithubSignIn}
                 disabled={isLoading}
+                className="border-theme-gray/20 text-theme-red hover:bg-theme-charcoal"
               >
                 <svg
                   className="mr-2 h-4 w-4"
@@ -192,11 +196,11 @@ const Login = () => {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <div className="text-center text-sm">
+            <div className="text-center text-sm text-gray-400">
               Vous n'avez pas de compte?{" "}
               <Link
                 to="/auth/register"
-                className="text-blue-600 hover:underline"
+                className="text-theme-red hover:text-theme-brightRed"
               >
                 Inscrivez-vous
               </Link>

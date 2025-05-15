@@ -1,7 +1,8 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Projects = () => {
   const projects = [
@@ -19,6 +20,7 @@ const Projects = () => {
         "Création d'un logo épuré, d'une charte graphique complète et d'un site responsive avec animations.",
       results:
         "Augmentation de 40% des demandes de contact et réduction du taux de rebond de 25%.",
+      tags: ["Branding", "Web Design", "UI/UX"],
     },
     {
       id: 2,
@@ -34,6 +36,7 @@ const Projects = () => {
         "Configuration d'un workflow Zapier personnalisé et développement d'un assistant virtuel basé sur l'IA.",
       results:
         "Réduction de 60% du temps de traitement des demandes et augmentation de 35% du taux de conversion.",
+      tags: ["IA", "Automatisation", "ChatBot"],
     },
     {
       id: 3,
@@ -49,6 +52,7 @@ const Projects = () => {
         "Développement d'un site e-commerce sur mesure avec intégration de systèmes de paiement et CRM.",
       results:
         "Augmentation des ventes en ligne de 120% et amélioration de l'efficacité logistique de 45%.",
+      tags: ["E-commerce", "Web Development", "UX Design"],
     },
     {
       id: 4,
@@ -64,6 +68,7 @@ const Projects = () => {
         "Développement d'un tableau de bord personnalisé avec visualisation de données et prédictions IA.",
       results:
         "Identification de nouvelles opportunités commerciales générant une augmentation du CA de 28%.",
+      tags: ["Data Analytics", "IA", "Business Intelligence"],
     },
     {
       id: 5,
@@ -79,6 +84,7 @@ const Projects = () => {
         "Conception d'une identité mémorable et déploiement d'une campagne cross-média cohérente.",
       results:
         "Augmentation de la notoriété de marque de 55% et croissance des followers sur les réseaux sociaux de 130%.",
+      tags: ["Branding", "Communication", "Social Media"],
     },
     {
       id: 6,
@@ -94,215 +100,235 @@ const Projects = () => {
         "Création d'un site moderne et d'un système de nurturing automatisé avec séquences d'emails personnalisés.",
       results:
         "Augmentation du taux de conversion de 45% et amélioration du taux d'engagement de 70%.",
+      tags: ["Web Design", "Automatisation", "Lead Generation"],
     },
   ];
 
+  // Animation variants for sections
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
+  // Animation variants for project cards
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
+    hover: { scale: 1.05, transition: { duration: 0.3 } },
+  };
+
+  // Animation variants for stats
+  const statVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  };
+
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-b from-theme-black via-theme-darkRed to-theme-black">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-communikAI-blue to-communikAI-red text-white py-20">
+      <motion.section
+        className="relative py-20 overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Nos Réalisations
-            </h1>
-            <p className="text-xl text-gray-200 mb-10">
-              Découvrez les projets que nous avons réalisés et les résultats
-              concrets obtenus pour nos clients.
-            </p>
-            <Link to="/contact">
-              <Button className="btn-primary">Discuter de votre projet</Button>
-            </Link>
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold mb-6 text-white"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
+              Nos <span className="text-theme-red">Réalisations</span>
+            </motion.h1>
+            <motion.p
+              className="text-xl text-gray-300 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
+              Découvrez comment nous transformons les défis en opportunités et les
+              idées en succès mesurables.
+            </motion.p>
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Link to="/contact">
+                <Button className="bg-theme-red hover:bg-theme-brightRed text-white px-8 py-6 rounded-full">
+                  Démarrer votre projet
+                  <motion.div
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                  >
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </motion.div>
+                </Button>
+              </Link>
+            </motion.div>
           </div>
         </div>
-      </section>
-      <div className="w-auto h-[0.5px] bg-gradient-to-r from-communikAI-gray to-communikAI-lightred mx-auto"></div>
+      </motion.section>
 
       {/* Projects Grid */}
-      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
+      <motion.section
+        className="py-20"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Études de cas
-            </h2>
-            <p className="text-lg text-white">
-              Chaque projet est une aventure unique, avec des défis spécifiques
-              et des solutions personnalisées. Voici quelques exemples de notre
-              travail.
-            </p>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project) => (
-              <div
+            {projects.map((project, index) => (
+              <motion.div
                 key={project.id}
-                className="bg-red-100 rounded-lg shadow-lg overflow-hidden group"
+                className="group bg-white bg-opacity-5 rounded-2xl overflow-hidden border border-gray-600 backdrop-blur-sm hover:border-theme-red transition-all duration-300"
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                whileHover="hover"
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
               >
-                <div className="h-56 overflow-hidden">
-                  <img
+                <div className="relative h-64 overflow-hidden">
+                  <motion.img
                     src={project.image}
                     alt={project.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    whileHover={{ scale: 1.15 }}
+                    transition={{ duration: 0.5 }}
                   />
-                </div>
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold">{project.name}</h3>
-                    <span className="bg-communikAI-red bg-opacity-10 text-communikAI-red text-xs px-3 py-1 rounded-full">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" />
+                  <motion.div
+                    className="absolute bottom-4 left-4 right-4"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.4 }}
+                  >
+                    <span className="inline-block px-3 py-1 bg-theme-red text-white text-sm rounded-full">
                       {project.type}
                     </span>
-                  </div>
-                  <p className="text-gray-600 mb-6">{project.description}</p>
-                  <button
-                    className="text-communikAI-red font-medium flex items-center"
-                    onClick={() =>
-                      document
-                        .getElementById(`modal-${project.id}`)
-                        ?.classList.remove("hidden")
-                    }
+                  </motion.div>
+                </div>
+
+                <div className="p-6">
+                  <motion.h3
+                    className="text-xl font-bold text-white mb-3"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.4 }}
                   >
-                    Voir le détail <ArrowRight size={16} className="ml-2" />
-                  </button>
-                </div>
-
-                {/* Modal */}
-                <div
-                  id={`modal-${project.id}`}
-                  className="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-                >
-                  <div className="bg-red-100 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-                    <div className="h-72 overflow-hidden">
-                      <img
-                        src={project.image}
-                        alt={project.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-8">
-                      <div className="flex justify-between items-start mb-6">
-                        <div>
-                          <h3 className="text-2xl font-bold">{project.name}</h3>
-                          <span className="bg-communikAI-red bg-opacity-10 text-communikAI-red text-sm px-3 py-1 rounded-full inline-block mt-2">
-                            {project.type}
-                          </span>
-                        </div>
-                        <button
-                          onClick={() =>
-                            document
-                              .getElementById(`modal-${project.id}`)
-                              ?.classList.add("hidden")
-                          }
-                          className="text-gray-400 hover:text-gray-600"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-
-                      <p className="text-gray-600 mb-6">
-                        {project.description}
-                      </p>
-
-                      <div className="space-y-6">
-                        <div>
-                          <h4 className="text-lg font-semibold mb-2">
-                            Objectifs du projet
-                          </h4>
-                          <p className="text-gray-600">{project.objectives}</p>
-                        </div>
-                        <div>
-                          <h4 className="text-lg font-semibold mb-2">
-                            Notre solution
-                          </h4>
-                          <p className="text-gray-600">{project.solution}</p>
-                        </div>
-                        <div>
-                          <h4 className="text-lg font-semibold mb-2">
-                            Résultats
-                          </h4>
-                          <p className="text-gray-600">{project.results}</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-8">
-                        <Link to="/contact">
-                          <Button className="btn-primary w-full sm:w-auto">
-                            Discuter d'un projet similaire
-                          </Button>
-                        </Link>
-                      </div>
-                    </div>
+                    {project.name}
+                  </motion.h3>
+                  <motion.p
+                    className="text-gray-400 mb-4"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.4 }}
+                  >
+                    {project.description}
+                  </motion.p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map((tag, tagIndex) => (
+                      <motion.span
+                        key={tagIndex}
+                        className="text-xs px-2 py-1 bg-theme-gray bg-opacity-10 text-white rounded-full"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.6 + tagIndex * 0.1, duration: 0.3 }}
+                      >
+                        {tag}
+                      </motion.span>
+                    ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Stats Section */}
-      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red">
+      <motion.section
+        className="py-20 bg-theme-black bg-opacity-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div className="bg-white p-8 rounded-lg shadow-md text-center">
-                <div className="text-4xl font-bold text-communikAI-red mb-2">
-                  50+
-                </div>
-                <p className="text-gray-600">Projets réalisés</p>
-              </div>
-              <div className="bg-white p-8 rounded-lg shadow-md text-center">
-                <div className="text-4xl font-bold text-communikAI-red mb-2">
-                  92%
-                </div>
-                <p className="text-gray-600">Clients satisfaits</p>
-              </div>
-              <div className="bg-white p-8 rounded-lg shadow-md text-center">
-                <div className="text-4xl font-bold text-communikAI-red mb-2">
-                  45%
-                </div>
-                <p className="text-gray-600">Taux de conversion moyen</p>
-              </div>
-              <div className="bg-white p-8 rounded-lg shadow-md text-center">
-                <div className="text-4xl font-bold text-communikAI-red mb-2">
-                  4
-                </div>
-                <p className="text-gray-600">Prix d'innovation</p>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {[
+              { value: "50+", label: "Projets réalisés" },
+              { value: "92%", label: "Clients satisfaits" },
+              { value: "45%", label: "Taux de conversion moyen" },
+              { value: "4", label: "Prix d'innovation" },
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                className="bg-white bg-opacity-5 p-8 rounded-2xl border border-gray-600 text-center backdrop-blur-sm"
+                variants={statVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+              >
+                <motion.div
+                  className="text-4xl font-bold text-theme-red mb-2"
+                  initial={{ scale: 0.8 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ delay: index * 0.2 + 0.2, duration: 0.5, type: "spring" }}
+                >
+                  {stat.value}
+                </motion.div>
+                <p className="text-gray-300">{stat.label}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-communikAI-blue to-communikAI-red text-white">
+      <motion.section
+        className="py-20"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-white mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             Prêt pour votre prochain projet ?
-          </h2>
-          <p className="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
-            Chaque projet commence par une conversation. Contactez-nous pour
-            discuter de vos idées et objectifs.
-          </p>
-          <Link to="/contact">
-            <Button className="bg-white text-communikAI-red hover:bg-gray-100 text-lg px-8 py-6">
-              Démarrer votre projet
-            </Button>
-          </Link>
+          </motion.h2>
+          <motion.p
+            className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            Transformez vos idées en réalité avec notre expertise en design,
+            développement et innovation.
+          </motion.p>
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+            <Link to="/contact">
+              <Button className="bg-theme-red hover:bg-theme-brightRed text-white px-8 py-6 rounded-full">
+                Démarrer votre projet
+                <motion.div
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                >
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </motion.div>
+              </Button>
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 };
