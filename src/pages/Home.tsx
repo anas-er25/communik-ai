@@ -131,13 +131,10 @@ const Home = () => {
       {/* Power Section */}
       <section
         className="bg-theme-black py-24"
-       
       >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div
-             
-            >
+            <div>
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
                 L'infrastructure pour développer{" "}
                 <span className="text-theme-red">l'économie numérique</span>
@@ -154,7 +151,6 @@ const Home = () => {
                 </p>
               </div>
             </div>
-
             <div
               className="relative"
             
@@ -274,7 +270,6 @@ const Home = () => {
       {/* CTA Section */}
       <section
         className="bg-theme-red py-24"
-       
       >
         <div className="container mx-auto px-4 text-center">
           <h2
