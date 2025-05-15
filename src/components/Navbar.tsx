@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Menu, X, User, User2 } from 'lucide-react';
@@ -13,27 +13,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import logo from '../../public/logo.png';
 
-
-const Navbar = () => {
+// Using memo to prevent unnecessary re-renders
+const Navbar = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
+  // Memoize event handlers with useCallback
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleSignOut = async () => {
+  const handleSignOut = useCallback(async () => {
     try {
       await signOut();
       navigate('/');
     } catch (error) {
       console.error("Failed to sign out:", error);
     }
-  };
+  }, [signOut, navigate]);
 
+  // Pre-defined navigation links
   const navLinks = [
     { name: 'Accueil', path: '/' },
     { name: 'Réalisations', path: '/realisations' },
@@ -45,7 +46,14 @@ const Navbar = () => {
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <span className="text-xl font-heading font-bold text-white">
-            <img src={logo} alt="logo" width={200} />
+            <img 
+              src={logo} 
+              alt="logo" 
+              width="200" 
+              height="45" 
+              loading="eager" 
+              fetchpriority="high" 
+            />
           </span>
         </Link>
 
@@ -57,7 +65,7 @@ const Navbar = () => {
                 key={link.name}
                 to={link.path}
                 className={`transition-colors font-medium
-                  ${location.pathname == link.path ?
+                  ${location.pathname === link.path ?
                     'text-theme-red'
                     : 'text-gray-300 hover:text-theme-red'}`}
               >
@@ -75,6 +83,8 @@ const Navbar = () => {
                       src={currentUser.photoURL}
                       alt="Profile"
                       className="h-8 w-8 rounded-full border border-theme-red"
+                      width="32"
+                      height="32"
                     />
                   ) : (
                     <User className="h-5 w-5" />
@@ -109,16 +119,17 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button - Only render when needed */}
         <button
           className="md:hidden p-2 rounded-md text-white hover:text-theme-red"
           onClick={toggleMenu}
+          aria-label="Toggle menu"
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Only render when open */}
       {isMenuOpen && (
         <div className="md:hidden bg-theme-black shadow-md py-4 px-4 absolute top-16 left-0 right-0 z-50 animate-fade-in border-t border-theme-gray">
           <div className="flex flex-col space-y-4">
@@ -127,7 +138,7 @@ const Navbar = () => {
                 key={link.name}
                 to={link.path}
                 className={`transition-colors font-medium
-                  ${location.pathname == link.path ?
+                  ${location.pathname === link.path ?
                     'text-theme-red'
                     : 'text-gray-300 hover:text-theme-red'}`}
                 onClick={toggleMenu}
@@ -169,6 +180,8 @@ const Navbar = () => {
       )}
     </nav>
   );
-};
+});
+
+Navbar.displayName = 'Navbar';
 
 export default Navbar;
