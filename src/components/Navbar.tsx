@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, User2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   DropdownMenu,
@@ -18,6 +18,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation()
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -54,21 +56,24 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-gray-300 hover:text-theme-red transition-colors font-medium"
+                className={`transition-colors font-medium
+                  ${location.pathname == link.path ?
+                    'text-theme-red'
+                    : 'text-gray-300 hover:text-theme-red'}`}
               >
                 {link.name}
               </Link>
             ))}
           </div>
-          
+
           {currentUser ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full text-white hover:text-theme-red">
                   {currentUser.photoURL ? (
-                    <img 
-                      src={currentUser.photoURL} 
-                      alt="Profile" 
+                    <img
+                      src={currentUser.photoURL}
+                      alt="Profile"
                       className="h-8 w-8 rounded-full border border-theme-red"
                     />
                   ) : (
@@ -82,7 +87,9 @@ const Navbar = () => {
                 </div>
                 <DropdownMenuSeparator className="bg-theme-gray" />
                 <DropdownMenuItem asChild className="text-white hover:text-theme-red hover:bg-theme-darkBlack">
-                  <Link to="/profile" className="cursor-pointer">Mon profil</Link>
+                  <Link to="/profile" className="cursor-pointer flex items-center gap-2">
+                    <User2 className="text-white" width={20} />
+                    Mon profil</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-theme-gray" />
                 <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-white hover:text-theme-red hover:bg-theme-darkBlack">
@@ -119,16 +126,27 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-gray-300 hover:text-theme-red transition-colors py-2 px-4 font-medium"
+                className={`transition-colors font-medium
+                  ${location.pathname == link.path ?
+                    'text-theme-red'
+                    : 'text-gray-300 hover:text-theme-red'}`}
                 onClick={toggleMenu}
               >
                 {link.name}
               </Link>
             ))}
-            
+            <div className='border-t border-gray-700'></div>
             {currentUser ? (
               <>
-                <Link to="/profile" className="py-2 px-4 text-gray-300 hover:text-theme-red" onClick={toggleMenu}>Mon profil</Link>
+                <Link
+                  to="/profile"
+                  className="p-2 text-gray-300 hover:text-theme-red flex items-center gap-2"
+                  onClick={toggleMenu}
+                >
+                  <User2 className="text-white" width={20} />
+                  Mon profil
+                </Link>
+
                 <Button variant="outline" className="justify-start border-theme-red text-theme-red hover:bg-theme-red hover:text-white" onClick={() => {
                   handleSignOut();
                   toggleMenu();
