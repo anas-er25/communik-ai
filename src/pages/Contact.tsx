@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -99,420 +100,216 @@ const Contact = () => {
   };
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-communikAI-blue to-communikAI-red text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Contactez-nous
-            </h1>
-            <p className="text-xl text-gray-200">
-              Une question, un projet à discuter ? Nous sommes à votre écoute.
-            </p>
-          </div>
+    <div className="min-h-screen bg-theme-black text-white">
+      {/* Hero Section - Simplified to match the design in the reference image */}
+      <section className="py-20 px-4 md:px-10 lg:px-20 text-center">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
+            Nous sommes là pour vous aider
+          </h1>
         </div>
       </section>
-      <div className="w-auto h-[0.5px] bg-gradient-to-r from-communikAI-gray to-communikAI-lightred mx-auto"></div>
 
-      {/* Contact Form Section */}
-      <section className="section-padding bg-gradient-to-r from-communikAI-blue to-communikAI-red ">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              {/* Contact Info */}
-              <div className="bg-red-100 p-8 rounded-lg">
-                <h2 className="text-2xl font-bold mb-6">
-                  Informations de contact
-                </h2>
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-communikAI-red bg-opacity-10 p-3 rounded-full">
-                      <MapPin className="text-communikAI-red h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium mb-1">Adresse</h3>
-                      <p className="text-gray-600">
-                        123 Rue de l'Innovation, 75000 Paris
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-communikAI-red bg-opacity-10 p-3 rounded-full">
-                      <Mail className="text-communikAI-red h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium mb-1">Email</h3>
-                      <p className="text-gray-600">contact@communik-ai.fr</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-communikAI-red bg-opacity-10 p-3 rounded-full">
-                      <Phone className="text-communikAI-red h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium mb-1">Téléphone</h3>
-                      <p className="text-gray-600">+33 1 23 45 67 89</p>
-                    </div>
-                  </div>
+      {/* Contact Form Section - Simplified to match the reference image */}
+      <section className="pb-20 px-4 md:px-10 lg:px-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Form */}
+            <div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName" className="text-white">
+                    Nom
+                  </Label>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    placeholder="ex. John Smith"
+                    required
+                    className="bg-theme-gray/20 border-theme-gray/30 text-white"
+                  />
                 </div>
 
-                <div className="mt-12">
-                  <h2 className="text-2xl font-bold mb-6">
-                    Horaires d'ouverture
-                  </h2>
-                  <div className="space-y-2">
-                    <p className="flex justify-between">
-                      <span className="font-medium">Lundi - Vendredi</span>
-                      <span className="text-gray-600">9h - 18h</span>
-                    </p>
-                    <p className="flex justify-between">
-                      <span className="font-medium">Samedi</span>
-                      <span className="text-gray-600">Sur rendez-vous</span>
-                    </p>
-                    <p className="flex justify-between">
-                      <span className="font-medium">Dimanche</span>
-                      <span className="text-gray-600">Fermé</span>
-                    </p>
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-white">
+                    Adresse email
+                  </Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="ex. exemple@gmail.com"
+                    required
+                    className="bg-theme-gray/20 border-theme-gray/30 text-white"
+                  />
                 </div>
 
-                <div className="mt-12">
-                  <h2 className="text-2xl font-bold mb-6">Suivez-nous</h2>
-                  <div className="flex space-x-4">
-                    <a
-                      href="#"
-                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                      </svg>
-                    </a>
-                    <a
-                      href="#"
-                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <rect
-                          x="2"
-                          y="2"
-                          width="20"
-                          height="20"
-                          rx="5"
-                          ry="5"
-                        ></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                      </svg>
-                    </a>
-                    <a
-                      href="#"
-                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                        <rect x="2" y="9" width="4" height="12"></rect>
-                        <circle cx="4" cy="4" r="2"></circle>
-                      </svg>
-                    </a>
-                    <a
-                      href="#"
-                      className="bg-red-50 hover:bg-communikAI-red hover:text-white transition-colors p-3 rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
-                      </svg>
-                    </a>
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="message" className="text-white">
+                    Message
+                  </Label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Dites-nous comment nous pouvons vous aider"
+                    rows={6}
+                    required
+                    className="bg-theme-gray/20 border-theme-gray/30 text-white"
+                  />
                 </div>
+
+                <div className="flex items-start space-x-2">
+                  <Checkbox
+                    id="gdprConsent"
+                    checked={formData.gdprConsent}
+                    onCheckedChange={handleCheckboxChange}
+                  />
+                  <Label htmlFor="gdprConsent" className="text-sm text-gray-300">
+                    J'accepte que mes données soient traitées pour me
+                    recontacter concernant ma demande.
+                  </Label>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-auto bg-white hover:bg-gray-100 text-black rounded-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Envoi en cours...
+                    </div>
+                  ) : (
+                    <div className="flex items-center px-4 py-2">
+                      Envoyer le message
+                    </div>
+                  )}
+                </Button>
+              </form>
+            </div>
+
+            {/* Testimonial */}
+            <div className="relative">
+              <div className="bg-theme-black border border-theme-gray/30 p-8 rounded-lg shadow-lg relative z-10">
+                <div className="mb-4">
+                  <svg width="120" height="30" viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="120" height="30" fill="none" />
+                    <text x="0" y="20" fontSize="20" fontWeight="bold" fill="white">CommunikAI</text>
+                  </svg>
+                </div>
+                <p className="text-white mb-2">
+                  <span className="font-bold">"CommunikAI</span> a réduit les délais de projet de 30%
+                </p>
+                <p className="text-gray-400 mb-6">
+                  et transformé notre communication d'équipe globale,
+                  nous faisant gagner des heures chaque semaine."
+                </p>
+                <svg width="60" height="30" viewBox="0 0 60 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="60" height="30" fill="none" />
+                  <text x="0" y="20" fontSize="16" fontWeight="bold" fill="#ea384c">Client</text>
+                </svg>
               </div>
-
-              {/* Form */}
-              <div>
-                <h2 className="text-2xl font-bold mb-6">
-                  Envoyez-nous un message
-                </h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">
-                        Prénom <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="firstName"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        placeholder="Votre prénom"
-                        required
-                        className="bg-red-100"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">
-                        Nom <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="lastName"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        placeholder="Votre nom"
-                        required
-                        className="bg-red-100"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">
-                        Email <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="votre@email.com"
-                        required
-                        className="bg-red-100"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phoneNumber">Téléphone</Label>
-                      <Input
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        type="tel"
-                        value={formData.phoneNumber}
-                        onChange={handleChange}
-                        placeholder="Votre numéro de téléphone"
-                        className="bg-red-100"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="company">Entreprise</Label>
-                    <Input
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      placeholder="Nom de votre entreprise (optionnel)"
-                      className="bg-red-100"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="serviceType">
-                      Type de service <span className="text-red-500">*</span>
-                    </Label>
-                    <Select
-                      className="bg-red-100"
-                      onValueChange={handleSelectChange}
-                      value={formData.serviceType}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Sélectionnez un service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="branding">Branding</SelectItem>
-                        <SelectItem value="web">
-                          Création de site web
-                        </SelectItem>
-                        <SelectItem value="ia">Stratégie IA</SelectItem>
-                        <SelectItem value="auto">Automatisation</SelectItem>
-                        <SelectItem value="other">Autre</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">
-                      Message <span className="text-red-500">*</span>
-                    </Label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Décrivez votre projet ou votre demande"
-                      rows={6}
-                      required
-                      className="bg-red-100"
-                    />
-                  </div>
-
-                  <div className="flex items-start space-x-2">
-                    <Checkbox
-                      id="gdprConsent"
-                      checked={formData.gdprConsent}
-                      onCheckedChange={handleCheckboxChange}
-                    />
-                    <Label htmlFor="gdprConsent" className="text-sm text-white">
-                      J'accepte que mes données soient traitées pour me
-                      recontacter concernant ma demande. Pour en savoir plus sur
-                      la gestion de vos données et vos droits, consultez notre
-                      politique de confidentialité.
-                    </Label>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="btn-primary w-full"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <div className="flex items-center">
-                        <svg
-                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Envoi en cours...
-                      </div>
-                    ) : (
-                      <div className="flex items-center">
-                        <Send className="mr-2 h-5 w-5" />
-                        Envoyer ma demande
-                      </div>
-                    )}
-                  </Button>
-                </form>
-              </div>
+              {/* Red glow effect */}
+              <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-theme-red/20 rounded-full blur-3xl opacity-70"></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Map Section */}
-      <section className="section-padding bg-red-400 py-0">
-        <div className="overflow-hidden rounded-lg border">
-          <iframe
-            title="Carte Google Maps"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.2712013001124!2d-8.030016025224263!3d31.640861541180602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef96ad478ef9%3A0x9a4265bf810cd3da!2sCOMMUNIK!5e1!3m2!1sen!2sma!4v1746218886829!5m2!1sen!2sma"
-            width="100%"
-            height="400"
-            style={{ border: 0, borderColor: "transparent" }}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="section-padding bg-gradient-to-r from-communikAI-gray to-communikAI-red">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-12 text-center">
-              Questions fréquentes
-            </h2>
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Quel est le délai moyen pour un projet ?
-                </h3>
-                <p className="text-white">
-                  La durée dépend de la complexité du projet. Un site vitrine
-                  simple peut prendre 2-3 semaines, tandis qu'un projet plus
-                  complexe nécessitera 2-3 mois. Nous établissons toujours un
-                  calendrier précis au démarrage.
-                </p>
+      {/* Footer with links - Styled to match reference image */}
+      <footer className="py-16 px-4 md:px-10 lg:px-20 bg-theme-black border-t border-theme-gray/20">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex justify-between flex-wrap">
+            <div className="mb-10">
+              <svg width="120" height="30" viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="120" height="30" fill="none" />
+                <text x="0" y="20" fontSize="20" fontWeight="bold" fill="white">CommunikAI</text>
+              </svg>
+              <div className="flex mt-6 space-x-4">
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+                  </svg>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"></path>
+                  </svg>
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+                  </svg>
+                </a>
               </div>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16">
               <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Comment se déroule la collaboration ?
-                </h3>
-                <p className="text-white">
-                  Nous commençons par un appel ou une réunion pour comprendre
-                  vos besoins, puis nous établissons une proposition détaillée.
-                  Une fois validée, nous travaillons par étapes avec des points
-                  de validation réguliers.
-                </p>
+                <h3 className="text-white font-semibold mb-4">Entreprise</h3>
+                <ul className="space-y-3">
+                  <li><a href="/equipe" className="text-gray-400 hover:text-white">À propos</a></li>
+                  <li><a href="/contact" className="text-gray-400 hover:text-white">Contactez-nous</a></li>
+                  <li><a href="/services" className="text-gray-400 hover:text-white">Services</a></li>
+                </ul>
               </div>
+              
               <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Proposez-vous un support après la livraison du projet ?
-                </h3>
-                <p className="text-white">
-                  Oui, nous offrons un support technique après la livraison et
-                  proposons également des contrats de maintenance pour assurer
-                  le bon fonctionnement et l'évolution de votre projet.
-                </p>
+                <h3 className="text-white font-semibold mb-4">Produit</h3>
+                <ul className="space-y-3">
+                  <li><a href="/services" className="text-gray-400 hover:text-white">Fonctionnalités</a></li>
+                  <li><a href="/services" className="text-gray-400 hover:text-white">Intégrations</a></li>
+                  <li><a href="/pricing" className="text-gray-400 hover:text-white">Tarifs</a></li>
+                </ul>
               </div>
+              
               <div>
-                <h3 className="text-xl font-semibold mb-3">
-                  Quel est le coût moyen d'un projet ?
-                </h3>
-                <p className="text-white">
-                  Les tarifs varient en fonction de la nature et de l'ampleur du
-                  projet. Nous établissons des devis personnalisés après avoir
-                  évalué précisément vos besoins. N'hésitez pas à nous contacter
-                  pour obtenir une estimation.
-                </p>
+                <h3 className="text-white font-semibold mb-4">Ressources</h3>
+                <ul className="space-y-3">
+                  <li><a href="/blog" className="text-gray-400 hover:text-white">Blog</a></li>
+                  <li><a href="/help" className="text-gray-400 hover:text-white">Centre d'aide</a></li>
+                  <li><a href="/realisations" className="text-gray-400 hover:text-white">Réalisations</a></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="text-white font-semibold mb-4">Plateforme</h3>
+                <ul className="space-y-3">
+                  <li><a href="/dashboard" className="text-gray-400 hover:text-white">Dashboard</a></li>
+                  <li><a href="/infrastructure" className="text-gray-400 hover:text-white">Infrastructure</a></li>
+                  <li><a href="/security" className="text-gray-400 hover:text-white">Sécurité</a></li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 };

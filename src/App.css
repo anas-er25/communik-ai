@@ -1,9 +1,7 @@
-
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .logo {
@@ -88,25 +86,21 @@
   border-radius: 8px;
 }
 
-.animated-gradient {
-  background: linear-gradient(-45deg, #121212, #1e1e1e, #c41c30, #ea384c);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
+/* Added styles for the dark themed contact page */
+.contact-form input,
+.contact-form textarea,
+.contact-form select {
+  background-color: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(60, 60, 60, 0.8);
+  color: white;
 }
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Full-width overrides for specific template style */
+/* Full-width overrides */
 .full-width-container {
   max-width: 100% !important;
   padding: 0 !important;
@@ -120,20 +114,32 @@
   margin-right: 0;
 }
 
-/* Added for the new template style */
-.glow-text {
-  text-shadow: 0 0 10px rgba(234, 56, 76, 0.5);
+/* Make sure images in testimonials are properly sized */
+.testimonial-logo {
+  max-height: 30px;
+  width: auto;
 }
 
-.red-gradient-bg {
-  background: linear-gradient(to bottom, rgba(18, 18, 18, 0.9), rgba(234, 56, 76, 0.2), rgba(18, 18, 18, 0.9));
+/* Footer styling to match the design */
+.footer-link {
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s ease;
 }
 
-.service-card {
-  transition: all 0.3s ease;
+.footer-link:hover {
+  color: white;
 }
 
-.service-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(234, 56, 76, 0.2);
+.footer-heading {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.social-icon {
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s ease;
+}
+
+.social-icon:hover {
+  color: white;
 }
