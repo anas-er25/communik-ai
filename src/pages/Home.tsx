@@ -162,25 +162,7 @@ const Home = () => {
               <div className="bg-gradient-to-tr from-theme-red to-theme-black p-6 rounded-lg">
                 <AspectRatio ratio={4 / 3}>
                   <div className="w-full h-full flex items-center justify-center">
-                    <div className="text-white">
-                      <div
-                       
-                      >
-                        <ArrowUpRight className="w-12 h-12 text-white mb-4" />
-                      </div>
-                      <div
-                        className="h-16 bg-gradient-to-r from-theme-red to-theme-brightRed w-3/4 mb-2 rounded"
-                        
-                      ></div>
-                      <div
-                        className="h-16 bg-gradient-to-r from-theme-red to-theme-brightRed w-full mb-2 rounded"
-                        
-                      ></div>
-                      <div
-                        className="h-16 bg-gradient-to-r from-theme-red to-theme-brightRed w-11/12 rounded"
-                       
-                      ></div>
-                    </div>
+                    <iframe src='https://my.spline.design/worldplanet-FhWJwimcYPs1v7SNInFhsCQN/' width='100%' height='100%'></iframe>
                   </div>
                 </AspectRatio>
               </div>

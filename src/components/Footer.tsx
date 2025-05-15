@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Twitter, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
-
+import logo from '../../public/logo.png';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -13,7 +13,7 @@ const Footer = () => {
           <div>
             <Link to="/" className="flex items-center mb-4">
               <span className="text-2xl font-heading font-bold text-white">
-                Communik<span className="text-theme-red">AI</span>
+                <img src={logo} alt="logo" width={200}/>
               </span>
             </Link>
             <p className="text-gray-300 mb-6">
@@ -21,13 +21,13 @@ const Footer = () => {
               Nous transformons vos idées en réalités numériques.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-theme-brightRed transition-colors">
+              <a href="https://www.instagram.com/" className="text-gray-300 hover:text-theme-brightRed transition-colors">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-theme-brightRed transition-colors">
+              <a href="https://x.com/" className="text-gray-300 hover:text-theme-brightRed transition-colors">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-theme-brightRed transition-colors">
+              <a href="https://www.linkedin.com/" className="text-gray-300 hover:text-theme-brightRed transition-colors">
                 <Linkedin size={20} />
               </a>
             </div>
@@ -35,18 +35,8 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold text-white mb-6">Liens rapides</h3>
+            {/* <h3 className="text-lg font-semibold text-white mb-6">Liens rapides</h3>
             <ul className="space-y-3">
-              <li>
-                <Link to="/services" className="text-gray-300 hover:text-theme-brightRed transition-colors">
-                  Nos services
-                </Link>
-              </li>
-              <li>
-                <Link to="/equipe" className="text-gray-300 hover:text-theme-brightRed transition-colors">
-                  Notre équipe
-                </Link>
-              </li>
               <li>
                 <Link to="/realisations" className="text-gray-300 hover:text-theme-brightRed transition-colors">
                   Réalisations
@@ -57,7 +47,7 @@ const Footer = () => {
                   Contact
                 </Link>
               </li>
-            </ul>
+            </ul> */}
           </div>
 
           {/* Contact Info */}
@@ -66,11 +56,11 @@ const Footer = () => {
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
                 <MapPin size={20} className="text-theme-red shrink-0 mt-1" />
-                <p className="text-gray-300">123 Rue de l'Innovation, 75000 Paris</p>
+                <p className="text-gray-300">320 rue saint honoré 75001 Paris</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone size={20} className="text-theme-red" />
-                <p className="text-gray-300">+33 1 23 45 67 89</p>
+                <p className="text-gray-300">+212 696486911</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail size={20} className="text-theme-red" />
