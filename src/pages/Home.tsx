@@ -151,10 +151,7 @@ const Home = () => {
                 </p>
               </div>
             </div>
-            <div
-              className="relative"
-            
-            >
+            <div className="relative">
               <div className="bg-gradient-to-tr from-theme-red to-theme-black p-6 rounded-lg">
                 <AspectRatio ratio={4 / 3}>
                   <div className="w-full h-full flex items-center justify-center">
