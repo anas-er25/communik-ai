@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Check, ArrowUpRight, Brush, Code, Brain, Zap } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
@@ -11,25 +11,21 @@ const Home = () => {
       icon: <Brush size={28} className="text-theme-red" />,
       title: "Branding",
       description: "Création d'identité visuelle, logos et chartes graphiques qui démarquent votre marque.",
-      path: "/services",
     },
     {
       icon: <Code size={28} className="text-theme-red" />,
       title: "Création de sites",
       description: "Sites vitrines, e-commerce et applications web optimisés pour le SEO et la performance.",
-      path: "/services",
     },
     {
       icon: <Brain size={28} className="text-theme-red" />,
       title: "Stratégie IA",
       description: "Conseil et intégration de solutions d'intelligence artificielle pour optimiser vos processus.",
-      path: "/services",
     },
     {
       icon: <Zap size={28} className="text-theme-red" />,
       title: "Automatisation",
       description: "Mise en place de workflows intelligents pour gagner en efficacité et productivité.",
-      path: "/services",
     },
   ];
 
@@ -61,6 +57,11 @@ const Home = () => {
     },
   ];
 
+  const navigate = useNavigate()
+  const getstarted = () => {
+    navigate('/auth/login')
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section with gradient background */}
@@ -76,7 +77,7 @@ const Home = () => {
               entreprise vers l'excellence numérique.
             </p>
             <div className="mt-10">
-              <Button className="rounded-full bg-theme-red hover:bg-theme-brightRed text-white px-8 py-6">
+              <Button onClick={getstarted} className="rounded-full bg-theme-red hover:bg-theme-brightRed text-white px-8 py-6">
                 Commencer maintenant
               </Button>
             </div>
@@ -141,12 +142,6 @@ const Home = () => {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
                 <p className="text-gray-400 mb-6">{service.description}</p>
-                <Link
-                  to={service.path}
-                  className="text-theme-red hover:text-theme-brightRed font-medium inline-flex items-center"
-                >
-                  En savoir plus <ArrowUpRight className="ml-2 h-4 w-4" />
-                </Link>
               </div>
             ))}
           </div>
@@ -187,7 +182,7 @@ const Home = () => {
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-8">
             Prêt à transformer votre communication ?
           </h2>
-          <Button className="rounded-full bg-white text-theme-red hover:bg-gray-100 px-8 py-6 font-bold text-lg">
+          <Button onClick={getstarted} className="rounded-full bg-white text-theme-red hover:bg-gray-100 px-8 py-6 font-bold text-lg">
             Commencer maintenant
           </Button>
         </div>
