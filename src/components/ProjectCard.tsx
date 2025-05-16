@@ -37,17 +37,23 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       aria-labelledby={`project-title-${project.id}`}
     >
       <div className="relative h-64 overflow-hidden">
-        <motion.img
-          src={project.image}
-          alt={`${project.name} - ${project.type}`}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          whileHover={{ scale: 1.15 }}
-          transition={{ duration: 0.5 }}
-          loading="lazy"
-          width={720}
-          height={480}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" />
+        <picture>
+          <source srcSet={`${project.image}?format=webp`} type="image/webp" />
+          <motion.img
+            src={project.image}
+            alt={`${project.name} - ${project.type}`}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            whileHover={{ scale: 1.15 }}
+            transition={{ duration: 0.5 }}
+            loading="lazy"
+            width={720}
+            height={480}
+            decoding="async"
+            fetchPriority="high"
+            style={{ aspectRatio: '720/480' }}
+          />
+        </picture>
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" aria-hidden="true" />
         <motion.div
           className="absolute bottom-4 left-4 right-4"
           initial={{ opacity: 0, y: 10 }}
