@@ -41,7 +41,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-theme-black text-white shadow-sm py-4 sticky top-0 z-50">
+    <nav className="bg-theme-black/10 backdrop-blur text-white shadow-sm py-4 sticky top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <span className="text-xl font-heading font-bold text-white">
