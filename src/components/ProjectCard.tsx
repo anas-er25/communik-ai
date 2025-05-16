@@ -37,7 +37,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       aria-labelledby={`project-title-${project.id}`}
     >
       <div className="relative h-64 overflow-hidden">
-        <picture>
+      <picture>
           <source srcSet={`${project.image}?format=webp`} type="image/webp" />
           <motion.img
             src={project.image}
@@ -53,7 +53,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             style={{ aspectRatio: '720/480' }}
           />
         </picture>
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" />
         <motion.div
           className="absolute bottom-4 left-4 right-4"
           initial={{ opacity: 0, y: 10 }}
