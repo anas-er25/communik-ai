@@ -15,6 +15,7 @@ import UserProfile from "./pages/auth/UserProfile";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
+import AuthRedirect from "./components/AuthRedirect";
 
 const queryClient = new QueryClient();
 
@@ -33,9 +34,9 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
 
               {/* Authentication routes */}
-              <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/register" element={<Register />} />
-              <Route path="/auth/password-reset" element={<PasswordReset />} />
+              <Route path="/auth/login" element={<AuthRedirect><Login /></AuthRedirect>} />
+              <Route path="/auth/register" element={<AuthRedirect><Register /></AuthRedirect>} />
+              <Route path="/auth/password-reset" element={<AuthRedirect><PasswordReset /></AuthRedirect>} />
 
               {/* Protected routes - available to all authenticated users */}
               <Route path="/profile" element={
