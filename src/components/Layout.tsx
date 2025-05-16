@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-theme-black to-theme-darkRed">
+    <div className="flex flex-col bg-gradient-to-b from-theme-black to-theme-darkRed min-h-screen">
       <Navbar />
       <main className="flex-grow">{children}</main>
       <Footer />
