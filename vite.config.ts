@@ -13,7 +13,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    process.env.NODE_ENV !== 'production' && visualizer(),
+    visualizer({ enabled: process.env.NODE_ENV !== 'production' }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.png'],
@@ -56,7 +56,7 @@ export default defineConfig({
             '@radix-ui/react-slot',
             '@radix-ui/react-switch',
             '@radix-ui/react-tabs',
-            '@radix-ui/react-toast',
+            '@radix-ui/react-toast'
           ],
           motion: ['framer-motion']
         }

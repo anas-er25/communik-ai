@@ -12,20 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Send, RefreshCw } from 'lucide-react';
-
-interface Lead {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  company: string;
-  status: "new" | "contacted" | "qualified" | "converted" | "lost";
-  score: number;
-  enriched: boolean;
-  createdAt: string;
-  lastContact?: string;
-  nextFollowUp?: string;
-}
+import { Lead } from '@/services/leadsService';
 
 interface LeadTableProps {
   leads: Lead[];
@@ -86,7 +73,7 @@ const LeadTable: React.FC<LeadTableProps> = ({
     return sortOrder === "asc" ? "↑" : "↓";
   };
 
-  // Map our sortOrder values to valid aria-sort values
+  // Helper function to map sorting values to aria-sort attribute values
   const getAriaSortValue = (key: keyof Lead): "none" | "ascending" | "descending" | "other" => {
     if (sortKey !== key) return "none";
     return sortOrder === "asc" ? "ascending" : "descending";
@@ -99,10 +86,10 @@ const LeadTable: React.FC<LeadTableProps> = ({
           <TableRow className="border-theme-gray/30 hover:bg-theme-red/10">
             <TableHead 
               className="cursor-pointer" 
-              onClick={() => onSort("firstName")}
-              aria-sort={getAriaSortValue("firstName")}
+              onClick={() => onSort("first_name")}
+              aria-sort={getAriaSortValue("first_name")}
             >
-              Nom {getSortIcon("firstName")}
+              Nom {getSortIcon("first_name")}
             </TableHead>
             <TableHead 
               className="cursor-pointer" 
@@ -139,7 +126,7 @@ const LeadTable: React.FC<LeadTableProps> = ({
           {leads.map((lead) => (
             <TableRow key={lead.id} className="border-theme-gray/30 hover:bg-theme-red/10">
               <TableCell className="font-medium text-gray-300">
-                {lead.firstName} {lead.lastName}
+                {lead.first_name} {lead.last_name}
               </TableCell>
               <TableCell className="text-gray-300">{lead.email}</TableCell>
               <TableCell className="text-gray-300">{lead.company}</TableCell>

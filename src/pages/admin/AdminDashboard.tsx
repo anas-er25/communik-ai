@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,7 +9,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { LogOut } from "lucide-react";
 import { enrichLead } from "@/lib/lead-enrichment";
 import { scheduleFollowUp } from "@/lib/lead-automation";
-import { mockLeads } from "@/data/mock-leads";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { Badge } from "@/components/ui/badge";
@@ -16,35 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import LeadFilters from "@/components/admin/LeadFilters";
 import LeadTable from "@/components/admin/LeadTable";
 import LeadPagination from "@/components/admin/LeadPagination";
-
-interface Lead {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  company: string;
-  serviceType: string;
-  message: string;
-  gdprConsent: boolean;
-  createdAt: string;
-  status: "new" | "contacted" | "qualified" | "converted" | "lost";
-  score: number;
-  enriched: boolean;
-  enrichmentData?: {
-    companySize?: string;
-    industry?: string;
-    location?: string;
-    website?: string;
-    linkedIn?: string;
-    twitter?: string;
-    revenue?: string;
-    foundedYear?: string;
-  };
-  lastContact?: string;
-  nextFollowUp?: string;
-  notes?: string;
-}
+import { Lead, fetchLeadsFromDB, syncAllLeadsFromSheet, updateLeadInDB } from "@/services/leadsService";
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -53,6 +25,7 @@ const AdminDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState("");
@@ -76,46 +49,85 @@ const AdminDashboard: React.FC = () => {
 
   // Load leads when component mounts
   useEffect(() => {
-    const fetchLeads = async () => {
-      try {
-        const response = await axios.get(
-          `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_SHEET_SHARE
-          }/values/Sheet1?key=${import.meta.env.VITE_GOOGLE_API_KEY}`
-        );
-
-        // Convertir les données de la feuille en objets
-        const [headers, ...rows] = response.data.values;
-        const leadsData = rows.map((row: any[], index: number) => {
-          const lead: any = {};
-          headers.forEach((header: string, i: number) => {
-            lead[header] = row[i];
-          });
-          return {
-            ...lead,
-            id: index.toString(),
-            status: "new",
-            score: Math.floor(Math.random() * 100),
-            enriched: false,
-          };
-        });
-
-        setLeads(leadsData);
-        setFilteredLeads(leadsData);
-      } catch (error) {
-        console.error("Erreur de chargement Google Sheets:", error);
-        toast({
-          title: "Erreur",
-          description:
-            "Impossible de charger les données depuis Google Sheets.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLeads();
+    loadLeads();
   }, []);
+
+  // Function to load leads from DB and then sync with Google Sheets
+  const loadLeads = async () => {
+    setIsLoading(true);
+    try {
+      // First try to get leads from Supabase
+      const dbLeads = await fetchLeadsFromDB();
+      
+      if (dbLeads && dbLeads.length > 0) {
+        setLeads(dbLeads);
+        setFilteredLeads(dbLeads);
+      }
+      
+      // Then fetch from Google Sheets and sync
+      await syncWithGoogleSheets();
+    } catch (error) {
+      console.error("Error loading leads:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les leads.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Function to sync with Google Sheets
+  const syncWithGoogleSheets = async () => {
+    setIsSyncing(true);
+    try {
+      const response = await axios.get(
+        `https://sheets.googleapis.com/v4/spreadsheets/${
+          import.meta.env.VITE_SHEET_SHARE
+        }/values/Sheet1?key=${import.meta.env.VITE_GOOGLE_API_KEY}`
+      );
+
+      // Convert sheet data to lead objects
+      const [headers, ...rows] = response.data.values;
+      const sheetLeads = rows.map((row: any[], index: number) => {
+        const lead: any = {};
+        headers.forEach((header: string, i: number) => {
+          lead[header] = row[i];
+        });
+        return {
+          ...lead,
+          id: index.toString(),
+          status: "new",
+          score: Math.floor(Math.random() * 100),
+          enriched: false,
+        };
+      });
+
+      // Sync sheet leads with the database
+      await syncAllLeadsFromSheet(sheetLeads);
+      
+      // Fetch all leads from DB after syncing
+      const updatedDbLeads = await fetchLeadsFromDB();
+      
+      setLeads(updatedDbLeads);
+      setFilteredLeads(updatedDbLeads);
+      
+      toast({
+        title: "Synchronisation réussie",
+        description: "Les leads ont été synchronisés avec Google Sheets.",
+      });
+    } catch (error) {
+      console.error("Error syncing with Google Sheets:", error);
+      toast({
+        title: "Erreur de synchronisation",
+        description: "Impossible de synchroniser avec Google Sheets.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   // Handle logging out
   const handleLogout = async () => {
@@ -146,10 +158,10 @@ const AdminDashboard: React.FC = () => {
         const searchLower = searchTerm.toLowerCase();
         filtered = filtered.filter(
           (lead) =>
-            lead.firstName.toLowerCase().includes(searchLower) ||
-            lead.lastName.toLowerCase().includes(searchLower) ||
+            lead.first_name.toLowerCase().includes(searchLower) ||
+            lead.last_name.toLowerCase().includes(searchLower) ||
             lead.email.toLowerCase().includes(searchLower) ||
-            lead.company.toLowerCase().includes(searchLower)
+            (lead.company && lead.company.toLowerCase().includes(searchLower))
         );
       }
 
@@ -161,7 +173,7 @@ const AdminDashboard: React.FC = () => {
       // Service filter
       if (serviceFilter !== "all") {
         filtered = filtered.filter(
-          (lead) => lead.serviceType === serviceFilter
+          (lead) => lead.service_type === serviceFilter
         );
       }
 
@@ -179,7 +191,7 @@ const AdminDashboard: React.FC = () => {
         }
 
         filtered = filtered.filter(
-          (lead) => new Date(lead.createdAt) >= cutoffDate
+          (lead) => new Date(lead.created_at) >= cutoffDate
         );
       }
 
@@ -239,16 +251,21 @@ const AdminDashboard: React.FC = () => {
 
       const enrichedData = await enrichLead(
         leads[leadIndex].email,
-        leads[leadIndex].company
+        leads[leadIndex].company || ''
       );
 
-      const updatedLeads = [...leads];
-      updatedLeads[leadIndex] = {
-        ...updatedLeads[leadIndex],
+      // Update the lead in the database
+      const updatedLead = await updateLeadInDB(leadId, {
         enriched: true,
-        enrichmentData: enrichedData,
-      };
+        // Assuming enrichmentData is stored as a JSON string or in separate fields
+        notes: JSON.stringify(enrichedData)
+      });
 
+      // Update leads state
+      const updatedLeads = leads.map(lead => 
+        lead.id === leadId ? updatedLead : lead
+      );
+      
       setLeads(updatedLeads);
 
       toast({
@@ -278,12 +295,16 @@ const AdminDashboard: React.FC = () => {
       const lead = leads[leadIndex];
       const nextFollowUp = await scheduleFollowUp(lead);
 
-      const updatedLeads = [...leads];
-      updatedLeads[leadIndex] = {
-        ...updatedLeads[leadIndex],
-        nextFollowUp: nextFollowUp,
-      };
+      // Update the lead in the database
+      const updatedLead = await updateLeadInDB(leadId, {
+        next_follow_up: nextFollowUp
+      });
 
+      // Update leads state
+      const updatedLeads = leads.map(lead => 
+        lead.id === leadId ? updatedLead : lead
+      );
+      
       setLeads(updatedLeads);
 
       toast({
@@ -302,42 +323,58 @@ const AdminDashboard: React.FC = () => {
   };
 
   // Mark a lead as contacted
-  const handleMarkAsContacted = (leadId: string) => {
-    const leadIndex = leads.findIndex((lead) => lead.id === leadId);
-    if (leadIndex === -1) return;
+  const handleMarkAsContacted = async (leadId: string) => {
+    try {
+      // Update the lead in the database
+      const updatedLead = await updateLeadInDB(leadId, {
+        status: "contacted" as const,
+        last_contact: new Date().toISOString()
+      });
 
-    const updatedLeads = [...leads];
-    updatedLeads[leadIndex] = {
-      ...updatedLeads[leadIndex],
-      status: "contacted" as const,
-      lastContact: new Date().toISOString(),
-    };
+      // Update leads state
+      const updatedLeads = leads.map(lead => 
+        lead.id === leadId ? updatedLead : lead
+      );
+      
+      setLeads(updatedLeads);
 
-    setLeads(updatedLeads);
-
-    toast({
-      title: "Statut mis à jour",
-      description: "Le lead a été marqué comme contacté.",
-    });
+      toast({
+        title: "Statut mis à jour",
+        description: "Le lead a été marqué comme contacté.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur de mise à jour",
+        description: "Impossible de mettre à jour le statut du lead.",
+        variant: "destructive",
+      });
+    }
   };
 
   // Update lead status
-  const handleUpdateStatus = (leadId: string, status: Lead["status"]) => {
-    const leadIndex = leads.findIndex((lead) => lead.id === leadId);
-    if (leadIndex === -1) return;
+  const handleUpdateStatus = async (leadId: string, status: Lead["status"]) => {
+    try {
+      // Update the lead in the database
+      const updatedLead = await updateLeadInDB(leadId, { status });
 
-    const updatedLeads = [...leads];
-    updatedLeads[leadIndex] = {
-      ...updatedLeads[leadIndex],
-      status: status,
-    };
+      // Update leads state
+      const updatedLeads = leads.map(lead => 
+        lead.id === leadId ? updatedLead : lead
+      );
+      
+      setLeads(updatedLeads);
 
-    setLeads(updatedLeads);
-
-    toast({
-      title: "Statut mis à jour",
-      description: `Le statut du lead a été changé en "${status}".`,
-    });
+      toast({
+        title: "Statut mis à jour",
+        description: `Le statut du lead a été changé en "${status}".`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur de mise à jour",
+        description: "Impossible de mettre à jour le statut du lead.",
+        variant: "destructive",
+      });
+    }
   };
 
   // Handle column sorting
@@ -495,15 +532,26 @@ const AdminDashboard: React.FC = () => {
               Gérez vos leads et suivez leur progression
             </p>
           </div>
-          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-            <Button
-              className="bg-theme-red hover:bg-theme-brightRed text-white rounded-full"
-              onClick={handleLogout}
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Déconnexion
-            </Button>
-          </motion.div>
+          <div className="flex gap-2">
+            <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+              <Button
+                className="bg-theme-red hover:bg-theme-brightRed text-white"
+                onClick={syncWithGoogleSheets}
+                disabled={isSyncing}
+              >
+                {isSyncing ? "Synchronisation..." : "Synchroniser avec Sheets"}
+              </Button>
+            </motion.div>
+            <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+              <Button
+                className="bg-theme-red hover:bg-theme-brightRed text-white rounded-full"
+                onClick={handleLogout}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Déconnexion
+              </Button>
+            </motion.div>
+          </div>
         </motion.div>
 
         <Tabs defaultValue="leads" className="mb-8">
@@ -630,7 +678,7 @@ const AdminDashboard: React.FC = () => {
                         ))}
                         {card.services && card.services.map((service) => {
                           const count = leads.filter(
-                            (l) => l.serviceType === service
+                            (l) => l.service_type === service
                           ).length;
                           const percentage = Math.round((count / leads.length) * 100);
                           return (
