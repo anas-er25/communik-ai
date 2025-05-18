@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Table,
@@ -85,6 +86,12 @@ const LeadTable: React.FC<LeadTableProps> = ({
     return sortOrder === "asc" ? "↑" : "↓";
   };
 
+  // Map our sortOrder values to valid aria-sort values
+  const getAriaSortValue = (key: keyof Lead): "none" | "ascending" | "descending" | "other" => {
+    if (sortKey !== key) return "none";
+    return sortOrder === "asc" ? "ascending" : "descending";
+  };
+
   return (
     <div className="overflow-x-auto" role="region" aria-label="Tableau des leads">
       <Table>
@@ -93,35 +100,35 @@ const LeadTable: React.FC<LeadTableProps> = ({
             <TableHead 
               className="cursor-pointer" 
               onClick={() => onSort("firstName")}
-              aria-sort={sortKey === "firstName" ? sortOrder : undefined}
+              aria-sort={getAriaSortValue("firstName")}
             >
               Nom {getSortIcon("firstName")}
             </TableHead>
             <TableHead 
               className="cursor-pointer" 
               onClick={() => onSort("email")}
-              aria-sort={sortKey === "email" ? sortOrder : undefined}
+              aria-sort={getAriaSortValue("email")}
             >
               Email {getSortIcon("email")}
             </TableHead>
             <TableHead 
               className="cursor-pointer" 
               onClick={() => onSort("company")}
-              aria-sort={sortKey === "company" ? sortOrder : undefined}
+              aria-sort={getAriaSortValue("company")}
             >
               Entreprise {getSortIcon("company")}
             </TableHead>
             <TableHead 
               className="cursor-pointer" 
               onClick={() => onSort("status")}
-              aria-sort={sortKey === "status" ? sortOrder : undefined}
+              aria-sort={getAriaSortValue("status")}
             >
               Statut {getSortIcon("status")}
             </TableHead>
             <TableHead 
               className="cursor-pointer" 
               onClick={() => onSort("score")}
-              aria-sort={sortKey === "score" ? sortOrder : undefined}
+              aria-sort={getAriaSortValue("score")}
             >
               Score {getSortIcon("score")}
             </TableHead>
