@@ -53,22 +53,21 @@ export async function syncSheetLeadToDB(sheetLead: any) {
     throw fetchError;
   }
   
-  // If lead exists, only update if sheet_id is provided and matches
+  // If lead exists, return it (we prioritize DB values)
   if (existingLeads) {
-    // If the lead is already in DB, don't update it (we prioritize DB values)
     return existingLeads as Lead;
   }
   
   // If lead doesn't exist, insert it
   const newLead = {
-    first_name: sheetLead.firstName || '',
-    last_name: sheetLead.lastName || '',
+    first_name: sheetLead.firstName || sheetLead.first_name || '',
+    last_name: sheetLead.lastName || sheetLead.last_name || '',
     email: sheetLead.email || '',
-    phone_number: sheetLead.phoneNumber || '',
+    phone_number: sheetLead.phoneNumber || sheetLead.phone_number || '',
     company: sheetLead.company || '',
-    service_type: sheetLead.serviceType || '',
+    service_type: sheetLead.serviceType || sheetLead.service_type || '',
     message: sheetLead.message || '',
-    gdpr_consent: sheetLead.gdprConsent || false,
+    gdpr_consent: sheetLead.gdprConsent || sheetLead.gdpr_consent || false,
     status: sheetLead.status || 'new',
     score: sheetLead.score || 50,
     sheet_id: sheetLead.id || null

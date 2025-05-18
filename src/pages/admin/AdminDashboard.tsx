@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -64,7 +63,7 @@ const AdminDashboard: React.FC = () => {
         setFilteredLeads(dbLeads);
       }
       
-      // Then fetch from Google Sheets and sync
+      // Then fetch from Google Sheets and sync automatically
       await syncWithGoogleSheets();
     } catch (error) {
       console.error("Error loading leads:", error);
@@ -93,19 +92,30 @@ const AdminDashboard: React.FC = () => {
       const sheetLeads = rows.map((row: any[], index: number) => {
         const lead: any = {};
         headers.forEach((header: string, i: number) => {
-          lead[header] = row[i];
+          // Map Google Sheets headers to our lead object properties
+          const normalizedHeader = header.toLowerCase().replace(/\s+/g, '_');
+          lead[normalizedHeader] = row[i];
         });
+        
+        // Ensure we have all required fields with proper names
         return {
           ...lead,
           id: index.toString(),
-          status: "new",
-          score: Math.floor(Math.random() * 100),
-          enriched: false,
+          first_name: lead.first_name || lead.firstname || lead.prénom || '',
+          last_name: lead.last_name || lead.lastname || lead.nom || '',
+          email: lead.email || lead.courriel || '',
+          phone_number: lead.phone_number || lead.phone || lead.téléphone || '',
+          company: lead.company || lead.entreprise || '',
+          service_type: lead.service_type || lead.service || '',
+          message: lead.message || lead.commentaire || '',
+          status: lead.status || "new",
+          score: lead.score || Math.floor(Math.random() * 100),
+          enriched: lead.enriched || false,
         };
       });
 
       // Sync sheet leads with the database
-      await syncAllLeadsFromSheet(sheetLeads);
+      const syncedLeads = await syncAllLeadsFromSheet(sheetLeads);
       
       // Fetch all leads from DB after syncing
       const updatedDbLeads = await fetchLeadsFromDB();
@@ -115,7 +125,7 @@ const AdminDashboard: React.FC = () => {
       
       toast({
         title: "Synchronisation réussie",
-        description: "Les leads ont été synchronisés avec Google Sheets.",
+        description: `${syncedLeads.length} leads ont été synchronisés avec Google Sheets.`,
       });
     } catch (error) {
       console.error("Error syncing with Google Sheets:", error);

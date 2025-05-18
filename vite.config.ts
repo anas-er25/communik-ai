@@ -13,7 +13,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    visualizer({ enabled: process.env.NODE_ENV !== 'production' }),
+    visualizer({ open: process.env.NODE_ENV !== 'production' }), // Fixed options here
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.png'],
